@@ -60,6 +60,7 @@ import java.awt.Shape;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
+import java.awt.event.WindowListener;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Rectangle2D;
 import java.awt.geom.RectangularShape;
@@ -337,11 +338,15 @@ public class ApplicationSwing extends JFrame {
 		disconnectMenuItem.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				connexion.close();
-				connectedToServer = false;
-				workerActif = false;
-				rafraichirMenus();
-				System.out.println("Connexion diestablished with \"" + serverAddress + ":" + serverPort + "\"");
+				try {
+					connexion.close();
+					connectedToServer = false;
+					workerActif = false;
+					rafraichirMenus();
+					System.out.println("Connexion diestablished with \"" + serverAddress + ":" + serverPort + "\"");
+				} catch (IOException ie) {
+					JOptionPane.showMessageDialog(null, "Erreur dans la déconnexion du serveur","Erreur de déconnexion du serveur", JOptionPane.WARNING_MESSAGE);
+				}
 			}
 		});
 		

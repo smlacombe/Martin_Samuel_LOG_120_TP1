@@ -25,8 +25,10 @@ public class NetworkClient {
 			return in.readLine();
 	}
 	
-	public void close() {
-		
+	public void close() throws IOException {
+		in.readLine();
+		out.println("END");
+		socket.close();
 	}
 	
 	//////////////////////////////////////////////////
