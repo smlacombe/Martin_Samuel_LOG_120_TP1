@@ -115,7 +115,7 @@ public final class ApplicationSupport {
 	  try {
 		  return (resources == null) ? null : resources.getString(key);
 	  } catch (MissingResourceException e) {
-		  return "**" + key + "**";
+		  return key;
 	  }
    }
    public static String formatMessage(String patternKey, String[] params) {
