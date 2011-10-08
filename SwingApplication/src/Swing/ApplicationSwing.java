@@ -220,19 +220,19 @@ public class ApplicationSwing extends JFrame {
 	/* Traiter l'item "Exit". */
 	class QuitterListener implements ActionListener {
 		public void actionPerformed(ActionEvent arg0) {
-			
-			if (connectedToServer)
-				disconnectClient();
-			
 			if (workerActif) {
 				workerActif = false;
-								
+
 				try {
 					Thread.sleep(DELAI_QUITTER_MSEC);
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
 			}
+			
+			if (connectedToServer)
+				disconnectClient();
+			
 			System.exit(0);
 		}
 	}
