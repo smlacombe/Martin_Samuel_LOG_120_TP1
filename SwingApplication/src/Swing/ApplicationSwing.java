@@ -51,6 +51,8 @@ package Swing;
 ********************************************************/
 
 import java.awt.Color;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -117,7 +119,6 @@ import ets.log120.tp1.ShapeFactory;
  */
 
 public class ApplicationSwing extends JFrame {
-
 	private static final int CANEVAS_HAUTEUR = 500;
 	private static final int CANEVAS_LARGEUR = 500;
 	private static final int DELAI_ENTRE_FORMES_MSEC = 1000;
@@ -219,8 +220,13 @@ public class ApplicationSwing extends JFrame {
 	/* Traiter l'item "Exit". */
 	class QuitterListener implements ActionListener {
 		public void actionPerformed(ActionEvent arg0) {
+			
+			if (connectedToServer)
+				disconnectClient();
+			
 			if (workerActif) {
 				workerActif = false;
+								
 				try {
 					Thread.sleep(DELAI_QUITTER_MSEC);
 				} catch (InterruptedException e) {
@@ -263,6 +269,13 @@ public class ApplicationSwing extends JFrame {
 	/* - Constructeur - Cr�er le cadre dans lequel les formes sont dessin�es. */
 	public ApplicationSwing() {
 		getContentPane().add(new JScrollPane(new CustomCanvas()));
+		this.addWindowListener(new WindowAdapter() {
+			@Override
+			public void windowClosing(WindowEvent e) {
+				if (connectedToServer)
+					disconnectClient();
+			}
+		});
 	}
 
 	/* Cr�er le menu "Draw". */
@@ -338,15 +351,7 @@ public class ApplicationSwing extends JFrame {
 		disconnectMenuItem.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				try {
-					connexion.close();
-					connectedToServer = false;
-					workerActif = false;
-					rafraichirMenus();
-					System.out.println("Connexion diestablished with \"" + serverAddress + ":" + serverPort + "\"");
-				} catch (IOException ie) {
-					JOptionPane.showMessageDialog(null, "Erreur dans la déconnexion du serveur","Erreur de déconnexion du serveur", JOptionPane.WARNING_MESSAGE);
-				}
+				disconnectClient();
 			}
 		});
 		
@@ -364,6 +369,20 @@ public class ApplicationSwing extends JFrame {
 		return menu;
 	}
 
+	private void disconnectClient() {
+		assert (connectedToServer);
+		
+		try {
+			connexion.close();
+			connectedToServer = false;
+			workerActif = false;
+			rafraichirMenus();
+			System.out.println("Connexion diestablished with \"" + serverAddress + ":" + serverPort + "\"");
+		} catch (IOException ie) {
+			JOptionPane.showMessageDialog(null, "Erreur dans la déconnexion du serveur","Erreur de déconnexion du serveur", JOptionPane.WARNING_MESSAGE);
+		}
+	}
+	
 	/* Activer ou d�sactiver les items du menu selon la s�lection. */
 	private void rafraichirMenus() {
 		demarrerMenuItem.setEnabled(connectedToServer && !workerActif);
