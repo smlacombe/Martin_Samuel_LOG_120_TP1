@@ -3,19 +3,20 @@ package ets.log120.tp1;
 /**
  * Forme qui pourra être affichée dans un environement graphique.
  * 
- * @author Samuel Milette-Lacombe & Martin Desharnais
+ * @author Samuel Milette-Lacombe
+ * @author Martin Desharnais
  */
 public abstract class Shape {
 
-	// ////////////////////////////////////////////////
-	// Constructeurs(s)
-	// ////////////////////////////////////////////////
+	// ///////////////////////////////////////////////
+	// Constructeur(s)
+	// ///////////////////////////////////////////////
 
 	/**
 	 * Construit une forme avec une couleur, un numéro d'identification et ses
 	 * coordonnées.
 	 */
-	public Shape(java.awt.Color color, int sequenceNumber, int x, int y) {
+	protected Shape(java.awt.Color color, int sequenceNumber, int x, int y) {
 		this.color = color;
 		this.sequenceNumber = sequenceNumber;
 		this.x = x;
@@ -23,9 +24,27 @@ public abstract class Shape {
 		ca.etsmtl.log.util.IDLogger.getInstance().logID(sequenceNumber);
 	}
 
-	// ////////////////////////////////////////////////
+	// ///////////////////////////////////////////////
+	// Accesseur(s)
+	// ///////////////////////////////////////////////
+
+	/**
+	 * Retourne la valeur en x de la position du coin supérieur gauche de la forme.
+	 */
+	protected int getX() {
+		return x;
+	}
+
+	/**
+	 * Retourne la valeur en y de la position du coin supérieur gauche de la forme.
+	 */
+	protected int getY() {
+		return y;
+	}
+
+	// ///////////////////////////////////////////////
 	// Méthode(s)
-	// ////////////////////////////////////////////////
+	// ///////////////////////////////////////////////
 
 	/**
 	 * Dessine la forme sur l'environement graphique reçu en paramètre.
@@ -33,13 +52,13 @@ public abstract class Shape {
 	public void draw(java.awt.Graphics g) {
 		g.setColor(color);
 	}
-	
-	////////////////////////////////////////////////////
+
+	// ///////////////////////////////////////////////
 	// Attribut(s)
-	////////////////////////////////////////////////////
+	// ///////////////////////////////////////////////
 
 	private java.awt.Color color;
-	protected int sequenceNumber;
-	protected int x;
-	protected int y;
+	private int sequenceNumber;
+	private int x;
+	private int y;
 }
