@@ -13,19 +13,17 @@ public class Oval extends Shape {
 	// ////////////////////////////////////////////////
 
 	/**
-	 * Construit un oval avec les informations sur sa taille, sa position et sa couleur.
-	 */
-	protected Oval(java.awt.Color color, int sequenceNumber, int x, int y, int hRadius, int vRadius) {
-		super(color, sequenceNumber, x - hRadius, y - vRadius);
-		height = vRadius * 2;
-		width = hRadius * 2;
-	}
-	
-	/**
 	 * Construit un oval avec les informations sur sa taille et sa position.
 	 */
 	public Oval(int sequenceNumber, int x, int y, int hRadius, int vRadius) {
 		this(java.awt.Color.blue, sequenceNumber, x, y, hRadius, vRadius);
+	}
+	
+	/**
+	 * Construit un oval avec les informations sur sa taille, sa position et sa couleur.
+	 */
+	protected Oval(java.awt.Color color, int sequenceNumber, int x, int y, int hRadius, int vRadius) {
+		super(color, sequenceNumber, x - hRadius, y - vRadius);
 		height = vRadius * 2;
 		width = hRadius * 2;
 	}
