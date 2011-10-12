@@ -34,6 +34,7 @@ public class NetworkClient {
 	//////////////////////////////////////////////////
 	// Attribut(s)
 	//////////////////////////////////////////////////
+
 	java.net.Socket socket = null;
 	java.io.PrintStream out = null;
 	java.io.BufferedReader in = null;

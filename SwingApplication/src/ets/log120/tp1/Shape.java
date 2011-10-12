@@ -21,7 +21,7 @@ public abstract class Shape {
 		this.sequenceNumber = sequenceNumber;
 		this.x = x;
 		this.y = y;
-		ca.etsmtl.log.util.IDLogger.getInstance().logID(sequenceNumber);
+		logger.logID(sequenceNumber);
 	}
 
 	// ///////////////////////////////////////////////
@@ -57,6 +57,7 @@ public abstract class Shape {
 	// Attribut(s)
 	// ///////////////////////////////////////////////
 
+	private static ca.etsmtl.log.util.IDLogger logger = ca.etsmtl.log.util.IDLogger.getInstance();
 	private java.awt.Color color;
 	private int sequenceNumber;
 	private int x;
