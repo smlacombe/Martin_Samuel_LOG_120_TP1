@@ -17,8 +17,6 @@ public class Rectangle extends Shape {
 	 */
 	public Rectangle(int sequenceNumber, int x1, int y1, int x2, int y2) {
 		this(java.awt.Color.RED, sequenceNumber, x1, y1, x2, y2);
-		height = y2 - y1;
-		width = x2 - x1;
 	}
 	
 	/**
