@@ -151,28 +151,11 @@ public class ApplicationSwing extends JFrame {
 	private boolean workerActif, connectedToServer;
 	private JMenuItem arreterMenuItem, demarrerMenuItem, disconnectMenuItem, connectMenuItem, serverAddressMenuItem;
 	
-	/* Traiter l'item "About...". */
-	class AProposDeListener implements ActionListener {
-		public void actionPerformed(ActionEvent arg0) {
-			JOptionPane.showMessageDialog(null, ApplicationSupport
-					.getResource(MESSAGE_DIALOGUE_A_PROPOS), ApplicationSupport
-					.getResource(MENU_AIDE_PROPOS),
-					JOptionPane.INFORMATION_MESSAGE);
-		}
-	}
-	
-	/* Traiter l'item "Stop". */
-	class ArreterListener implements ActionListener {
-		public void actionPerformed(ActionEvent arg0) {
-			workerActif = false;
-			rafraichirMenus();
-		}
-	}
-	
 	/* Traiter l'item "Start". */
 	class DemarrerListener implements ActionListener {
 		public void actionPerformed(ActionEvent arg0) {
 			final SwingWorker worker = new SwingWorker() {
+				@Override
 				public Object construct() {
 					dessinerFormes();
 					workerActif = false;
@@ -188,7 +171,6 @@ public class ApplicationSwing extends JFrame {
 		
 		protected void dessinerFormes() {
 			try {
-				//connexion = new ets.log120.tp1.NetworkClient("localhost", 10000);
 				while (workerActif) {
 					String request = connexion.getShapeRequest();
 					System.out.println(request);
@@ -203,14 +185,15 @@ public class ApplicationSwing extends JFrame {
 						e.printStackTrace();
 					}
 	 			}
-			} catch (UnknownHostException e1) {
-				e1.printStackTrace();
-			} catch (java.net.SocketException e1) {
-					JOptionPane.showMessageDialog(null, "La connexion avec le serveur a été interrompue. Vérifiez que le serveur est encore ouvert.","Erreur de serveur introuvable", JOptionPane.WARNING_MESSAGE);
+			} catch (UnknownHostException e) {
+				e.printStackTrace();
+			} catch (java.net.SocketException e) {
+					JOptionPane.showMessageDialog(null, "La connexion avec le serveur a été interrompue. Vérifiez que le serveur est encore ouvert.",
+							"Erreur de serveur introuvable", JOptionPane.WARNING_MESSAGE);
 					workerActif = false;
 					connectedToServer = false;
-			} catch (IOException e1) {
-				e1.printStackTrace();
+			} catch (IOException e) {
+				e.printStackTrace();
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -292,7 +275,13 @@ public class ApplicationSwing extends JFrame {
 				MENU_DESSIN_DEMARRER_TOUCHE_MASK));
 
 		arreterMenuItem = menu.getItem(1);
-		arreterMenuItem.addActionListener(new ArreterListener());
+		arreterMenuItem.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				workerActif = false;
+				rafraichirMenus();
+			}
+		});
 		arreterMenuItem.setAccelerator(KeyStroke.getKeyStroke(
 				MENU_DESSIN_ARRETER_TOUCHE_RACC,
 				MENU_DESSIN_ARRETER_TOUCHE_MASK));
@@ -302,13 +291,28 @@ public class ApplicationSwing extends JFrame {
 
 	/* Cr�er le menu "File". */
 	private JMenu creerMenuFichier() {
-		JMenu menu = ApplicationSupport.addMenu(this, MENU_FICHIER_TITRE,
-				new String[] { MENU_FICHIER_QUITTER });
+		JMenu menu = ApplicationSupport.addMenu(this, MENU_FICHIER_TITRE,new String[] { MENU_FICHIER_QUITTER });
 
-		menu.getItem(0).addActionListener(new QuitterListener());
-		menu.getItem(0).setAccelerator(
-				KeyStroke.getKeyStroke(MENU_FICHIER_QUITTER_TOUCHE_RACC,
-						MENU_FICHIER_QUITTER_TOUCHE_MASK));
+		menu.getItem(0).addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				if (workerActif) {
+					workerActif = false;
+
+					try {
+						Thread.sleep(DELAI_QUITTER_MSEC);
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
+				}
+				
+				if (connectedToServer)
+					disconnectClient();
+				
+				System.exit(0);
+			}
+		});
+		menu.getItem(0).setAccelerator(KeyStroke.getKeyStroke(MENU_FICHIER_QUITTER_TOUCHE_RACC, MENU_FICHIER_QUITTER_TOUCHE_MASK));
 
 		return menu;
 	}
@@ -334,14 +338,20 @@ public class ApplicationSwing extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				try {
+					assert serverAddress != null;
+					assert serverPort != 0;
+					
 					connexion = new ets.log120.tp1.NetworkClient(serverAddress, serverPort);
 					connectedToServer = true;
 					rafraichirMenus();
+					
 					System.out.println("Connexion established with \"" + serverAddress + ":" + serverPort + "\"");
 				} catch (UnknownHostException e) {
-					JOptionPane.showMessageDialog(null, "Le nom du serveur « " + serverAddress + " » est impossible à résoudre.","Erreur DNS", JOptionPane.WARNING_MESSAGE);
+					JOptionPane.showMessageDialog(null, "Le nom du serveur « " + serverAddress + " » est impossible à résoudre.",
+						"Erreur DNS", JOptionPane.WARNING_MESSAGE);
 				} catch (java.net.ConnectException e) {
-					JOptionPane.showMessageDialog(null, "Le serveur « " + serverAddress + " » sur le port « " + serverPort + " » est introuvable.","Erreur de serveur introuvable", JOptionPane.WARNING_MESSAGE);
+					JOptionPane.showMessageDialog(null, "Le serveur « " + serverAddress + " » sur le port « " + serverPort + " » est introuvable.",
+						"Erreur de serveur introuvable", JOptionPane.WARNING_MESSAGE);
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
@@ -366,22 +376,29 @@ public class ApplicationSwing extends JFrame {
 		JMenu menu = ApplicationSupport.addMenu(this, MENU_AIDE_TITRE,
 				new String[] { MENU_AIDE_PROPOS });
 
-		menu.getItem(0).addActionListener(new AProposDeListener());
+		menu.getItem(0).addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				JOptionPane.showMessageDialog(null, ApplicationSupport.getResource(MESSAGE_DIALOGUE_A_PROPOS),
+					ApplicationSupport.getResource(MENU_AIDE_PROPOS), JOptionPane.INFORMATION_MESSAGE);
+		}
+		});
 
 		return menu;
 	}
 
 	private void disconnectClient() {
-		assert (connectedToServer);
+		assert connectedToServer;
 		
 		try {
 			connexion.close();
-			connectedToServer = false;
 			workerActif = false;
+			connectedToServer = false;
 			rafraichirMenus();
 			System.out.println("Connexion diestablished with \"" + serverAddress + ":" + serverPort + "\"");
 		} catch (IOException ie) {
-			JOptionPane.showMessageDialog(null, "Erreur dans la déconnexion du serveur","Erreur de déconnexion du serveur", JOptionPane.WARNING_MESSAGE);
+			JOptionPane.showMessageDialog(null, "Erreur dans la déconnexion du serveur",
+				"Erreur de déconnexion du serveur", JOptionPane.WARNING_MESSAGE);
 		}
 	}
 	
