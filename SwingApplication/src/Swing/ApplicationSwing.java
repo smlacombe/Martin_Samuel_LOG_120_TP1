@@ -274,6 +274,8 @@ public class ApplicationSwing extends JFrame {
 			public void windowClosing(WindowEvent e) {
 				if (connectedToServer)
 					disconnectClient();
+
+				System.exit(0);
 			}
 		});
 	}

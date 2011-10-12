@@ -69,12 +69,6 @@ public final class ApplicationSupport {
       STATUS_AREA.add(STATUS);
 
       jFrame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-
-      jFrame.addWindowListener(new WindowAdapter() {
-         public void windowClosed(WindowEvent event) {
-            System.exit(0);
-         }
-      });
    }
    public static Locale getLocale() {
 	   return locale;
