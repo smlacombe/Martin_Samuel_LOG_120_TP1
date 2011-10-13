@@ -1,0 +1,20 @@
+Forces:
+	Facile d'ajouter de nouvelles formes
+	Facile de changer les paramètres sur l'affichage des formes (nombre, fréquence, etc.)
+	Facile de changer le format des communiquations avec le serveur.
+	Facile d'ajouter de la validation des données des formes.
+
+Faiblesses:
+	Difficile de changer l'interface graphique.
+
+Si l'on fait une analyse globale du programme, nous pouvons constater que les décisions de conception et d'implémentations ont certaines forces mais aussi certaines faiblesses.
+
+Le choix de l'arborescence des formes et de l'utilisation de la fonction Shape.draw(), nous permet d'ajouter très façilement de nouvelles formes. Par exemple, si je veux ajouter une forme "Triangle", je n'ai qu'à écrire une nouvelle classe héritant de la classe "Shape" et définir la méthode draw() afin de pouvoir l'afficher sur un environement Graphics. Comme le couplage est relativement faible, il ne restera qu'à ajouter la gestion de cette forme dans la fonction ShapeFactory.makeShape().
+
+L'utilisation d'une file à taille dynamyque pour stocker les formes et de plusieures constantes d'environement nous permettent de modifier certains paramètres d'affichages des formes uniquement par la modification de variables d'environement. Par exemple, le nombre de formes affichées simultanément ou bien le laps de temps entre chaque ajout.
+
+Puisque toutes les communications avec les serveur sont encapsulées dans la classe "NetworkClient" et que le traitement des données reçues est effectuée par la seule classe "RequestParser", il serait tout à fait possible de modifier le format d'échange d'informations entre le client et le serveur tout en ne modifiant que ces deux classes.
+
+La décision d'ajouter deux classes facultatives pour représenter des carrés et des cercles nous offre l'oportunité, si le besoin s'en fait sentir, d'ajouter une validation des données reçues. Par exemple, le constructeur de la classe "Square" pourrait s'assurer que la largeur et la hauteur soient égales.
+
+Malgré ces qualitées, il reste néanmoins quelques faiblesses dont la plus flagrante est le fort niveau de couplage existant entre le code de l'application et le code de l'interface graphique. Changer ou faire évoluer celui-ci pourrait nécessiter de revoir une part non négligeable du code.
