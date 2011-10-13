@@ -1,53 +1,16 @@
 package Swing;
 /******************************************************
- Cours :             LOGnnn
- Session :           Saison (�t�, automne, hiver) 200X
- Groupe :            n
- Projet :            Laboratoire #n
- �tudiant(e)(s) :    Marcel Marceau
-                     Edith Piaf
- Code(s) perm. :     MARM987341987
-                     PIAE324398724
- Professeur :        Groucho Marx
- Date cr��e :        2002-05-28
- Date dern. modif. : 2005-05-01
- 
-*******************************************************
- Historique des modifications
-*******************************************************
-  2002-05-28	Cris Fuhrman : Version initiale
-  
-  2004-03-07	Cris Fuhrman : Int�gration de SwingWorker 
-                requierant la classe additionnelle 
-                SwingWorker.java, utilisation des variables 
-                constantes, formatage de code source, 
-                organisation des imports, etc.
-
-  2005-05-01	Cris Fuhrman : Int�gration de ApplicationSupport
-  				requierant la classe additionnelle
-  				ApplicationSupport.java et les fichiers
-  				prefs.properties, app_xx.properties (o� xx est le
-  				code de la langue, p. ex. fr = fran�ais, en = anglais).
-  				Suppression de l'interface Shape.
-  				
-  2006-05-03	S�bastien Adam :
-  
-                Uniformisation et maintenance du code.
-
-                Ajout des classes pour la gestion des
-                items de menu. Un �couteur ajout� pour chaque item 
-                (DemarrerListener, ArreterListener, QuitterListener, 
-                AProposDeListener).  
-                
-                La classe ApplicationSwing n'impl�mente plus ActionListener. 
-                Elle d�l�gue la gestion des items.
-                
-                Plus besion d'un "if else if" dans la methode actionPerformed pour 
-                ex�cuter l'action associ�e � un item. Le code est plus
-                simple � comprendre, lire et maintenir.	
-
- La distribution originale se trouve � 
- https://cours.ele.etsmtl.ca/academique/log120/notesdecours/exemples/lab/lab1/ApplicationSwing.zip
+ Cours :             LOG120
+ Session :           Automne 2011
+ Groupe :            4
+ Projet :            Laboratoire 1
+ Étudiant(e)(s) :    Martin Desharnais
+                     Samuel Milette-Lacombe
+ Code(s) perm. :     DESM21099102
+                     MILS26059100
+ Professeur :        Sébastien Adam
+ Date créée :        2011-09-16
+ Date dern. modif. : 2011-10-13
 ********************************************************/
 
 import java.awt.Color;
@@ -56,20 +19,12 @@ import java.awt.event.WindowEvent;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.HeadlessException;
 import java.awt.RenderingHints;
-import java.awt.Shape;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
-import java.awt.event.WindowListener;
-import java.awt.geom.Ellipse2D;
-import java.awt.geom.Rectangle2D;
-import java.awt.geom.RectangularShape;
 import java.io.IOException;
-import java.net.URISyntaxException;
 import java.net.UnknownHostException;
-import java.rmi.ConnectException;
 
 import javax.swing.JFrame;
 import javax.swing.JMenu;
@@ -355,7 +310,6 @@ public class ApplicationSwing extends JFrame {
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
-				
 			}
 		});
 		
@@ -371,7 +325,7 @@ public class ApplicationSwing extends JFrame {
 	}
 	
 
-	/* Cr�er le menu "Help". */
+	/* Créer le menu "Help". */
 	private JMenu creerMenuAide() {
 		JMenu menu = ApplicationSupport.addMenu(this, MENU_AIDE_TITRE,
 				new String[] { MENU_AIDE_PROPOS });
@@ -397,12 +351,12 @@ public class ApplicationSwing extends JFrame {
 			rafraichirMenus();
 			System.out.println("Connexion diestablished with \"" + serverAddress + ":" + serverPort + "\"");
 		} catch (IOException ie) {
-			JOptionPane.showMessageDialog(null, "Erreur dans la déconnexion du serveur",
+			JOptionPane.showMessageDialog(null, "Erreur lors de la déconnexion du serveur.",
 				"Erreur de déconnexion du serveur", JOptionPane.WARNING_MESSAGE);
 		}
 	}
 	
-	/* Activer ou d�sactiver les items du menu selon la s�lection. */
+	/* Activer ou désactiver les items du menu selon la sélection. */
 	private void rafraichirMenus() {
 		demarrerMenuItem.setEnabled(connectedToServer && !workerActif);
 		arreterMenuItem.setEnabled(connectedToServer && workerActif);
@@ -422,10 +376,10 @@ public class ApplicationSwing extends JFrame {
 		disconnectMenuItem.setEnabled(connectedToServer);
 	}
 	
-	/* Lancer l'ex�cution de l'application. */
+	/* Lancer l'exécution de l'application. */
 	public static void main(String[] args) {
 		
-		/* Cr�er la fen�tre de l'application. */
+		/* Créer la fenêtre de l'application. */
 		ApplicationSwing cadre = new ApplicationSwing();
 
 		cadre.creerMenuFichier();
@@ -434,7 +388,7 @@ public class ApplicationSwing extends JFrame {
 		cadre.creerMenuAide();
 		cadre.rafraichirMenus();
 
-		/* Centrer la fen�tre. */
+		/* Centrer la fenêtre. */
 		cadre.setLocationRelativeTo(null);
 
 		/* Lancer l'application. */
