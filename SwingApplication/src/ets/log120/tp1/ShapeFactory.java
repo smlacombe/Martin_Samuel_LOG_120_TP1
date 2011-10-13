@@ -2,6 +2,7 @@ package ets.log120.tp1;
 
 /**
  * Fabriquant fournissant les formes utilisées par l'application.
+ * 
  * @author Martin Desharnais
  */
 public class ShapeFactory {

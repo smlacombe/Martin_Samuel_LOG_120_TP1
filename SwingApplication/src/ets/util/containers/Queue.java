@@ -4,7 +4,7 @@ import java.util.Iterator;
 import java.util.NoSuchElementException;
 
 /**
- * Conteneur implémentant une sémantique FIFO (First In First Out).
+ * Conteneur implÃ©mentant une sÃ©mantique FIFO (First In First Out).
  * 
  * @author Martin Desharnais
  */
@@ -27,7 +27,7 @@ public class Queue<T> implements Iterable<T> {
 	// ////////////////////////////////////////////////
 
 	/**
-	 * Retourne le nombre d'éléments dans la file
+	 * Retourne le nombre d'Ã©lÃ©ments dans la file
 	 */
 	public int size() {
 		return top + 1;
@@ -41,7 +41,7 @@ public class Queue<T> implements Iterable<T> {
 	}
 
 	/**
-	 * Retourne l'élément situé au début de la file.
+	 * Retourne l'Ã©lÃ©ment situÃ© au dÃ©but de la file.
 	 */
 	public T front() throws Exception {
 		if (top == -1)
@@ -51,7 +51,7 @@ public class Queue<T> implements Iterable<T> {
 	}
 
 	/**
-	 * Retourne l'élément situé à la fin de la file.
+	 * Retourne l'Ã©lÃ©ment situÃ© Ã© la fin de la file.
 	 */
 	public T back() throws Exception {
 		if (top == -1)
@@ -61,7 +61,7 @@ public class Queue<T> implements Iterable<T> {
 	}
 
 	/**
-	 * Retourne un itérateur permettant de parcourir la file.
+	 * Retourne un itÃ©rateur permettant de parcourir la file.
 	 */
 	public Iterator<T> iterator() {
 		return new QueueIterator<T>(array, top);
@@ -72,7 +72,7 @@ public class Queue<T> implements Iterable<T> {
 	// ////////////////////////////////////////////////
 
 	/**
-	 * Ajoute un élément à la fin de la file.
+	 * Ajoute un Ã©lÃ©ment Ã© la fin de la file.
 	 */
 	public void push(T newElement) {
 		if (top == array.length - 1) {
@@ -88,7 +88,7 @@ public class Queue<T> implements Iterable<T> {
 	}
 
 	/**
-	 * Supprime l'élément situé au début de la file.
+	 * Supprime l'Ã©lÃ©ment situÃ© au dÃ©but de la file.
 	 */
 	public void pop() throws Exception {
 		if (top == -1)
@@ -108,7 +108,7 @@ public class Queue<T> implements Iterable<T> {
 	private int top;
 
 	/**
-	 * Itérateur permettant de parcourir une séquence.
+	 * ItÃ©rateur permettant de parcourir une sÃ©quence.
 	 * 
 	 * @author Martin Desharnais
 	 */
@@ -119,7 +119,7 @@ public class Queue<T> implements Iterable<T> {
 		// ////////////////////////////////////////////////
 
 		/**
-		 * Construit un nouvel itérateur.
+		 * Construit un nouvel itÃ©rateur.
 		 */
 		public QueueIterator(Object[] array, int top) {
 			this.array = array;
@@ -132,14 +132,14 @@ public class Queue<T> implements Iterable<T> {
 		// ////////////////////////////////////////////////
 
 		/**
-		 * Retourne si il y a un élément suivant dans la séquence.
+		 * Retourne si il y a un Ã©lÃ©ment suivant dans la sÃ©quence.
 		 */
 		public boolean hasNext() {
 			return current != top;
 		}
 
 		/**
-		 * Retourne l'élément suivant de la séquence.
+		 * Retourne l'Ã©lÃ©ment suivant de la sÃ©quence.
 		 */
 		public E next() {
 			if (!hasNext())
@@ -153,7 +153,7 @@ public class Queue<T> implements Iterable<T> {
 		// ////////////////////////////////////////////////
 
 		/**
-		 * Supprime l'élément suivant de la séquence.
+		 * Supprime l'Ã©lÃ©ment suivant de la sÃ©quence.
 		 */
 		public void remove() {
 			throw new UnsupportedOperationException();

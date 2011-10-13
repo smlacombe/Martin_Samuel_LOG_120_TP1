@@ -13,7 +13,6 @@ package Swing;
  * up a Swing application.
  */
 import java.awt.*;
-import java.awt.event.*;
 import java.text.MessageFormat;
 import java.util.*;
 import javax.swing.*;
@@ -29,8 +28,6 @@ public final class ApplicationSupport {
    static private final JLabel STATUS = new JLabel();
    static private ResourceBundle preferences, resources;
    static private Locale locale;
-   static private String hostName;
-   static private int portNumber;
 
    static {
       try {
@@ -82,9 +79,7 @@ public final class ApplicationSupport {
 	  return preferences.getString(PREFERED_HOST_NAME);
    }
    
-   public static JMenu addMenu(final JFrame jFrame, String titleKey,
-                               String[] itemKeys) {
-
+   public static JMenu addMenu(final JFrame jFrame, String titleKey, String[] itemKeys) {
       JMenuBar menuBar = jFrame.getJMenuBar();
       if(menuBar == null) {
          menuBar = new JMenuBar();
@@ -99,12 +94,15 @@ public final class ApplicationSupport {
       menuBar.add(menu);
       return menu;
    }
+   
    public static JPanel getStatusArea() {
       return STATUS_AREA;
    }
+   
    public static void showStatus(String statusString) {
       STATUS.setText(statusString);
    }
+   
    public static String getResource(String key) {
 	  try {
 		  return (resources == null) ? null : resources.getString(key);
@@ -112,6 +110,7 @@ public final class ApplicationSupport {
 		  return key;
 	  }
    }
+   
    public static String formatMessage(String patternKey, String[] params) {
       String pattern = ApplicationSupport.getResource(patternKey);
       MessageFormat fmt = new MessageFormat(pattern);

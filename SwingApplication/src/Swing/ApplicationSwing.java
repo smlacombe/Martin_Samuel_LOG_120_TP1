@@ -154,26 +154,6 @@ public class ApplicationSwing extends JFrame {
 			}
 		}
 	}
-	
-	/* Traiter l'item "Exit". */
-	class QuitterListener implements ActionListener {
-		public void actionPerformed(ActionEvent arg0) {
-			if (workerActif) {
-				workerActif = false;
-
-				try {
-					Thread.sleep(DELAI_QUITTER_MSEC);
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
-			}
-			
-			if (connectedToServer)
-				disconnectClient();
-			
-			System.exit(0);
-		}
-	}
 
 	/* Cr�er le panneau sur lequel les formes sont dessin�es. */
 	class CustomCanvas extends JPanel {
@@ -251,16 +231,6 @@ public class ApplicationSwing extends JFrame {
 		menu.getItem(0).addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				if (workerActif) {
-					workerActif = false;
-
-					try {
-						Thread.sleep(DELAI_QUITTER_MSEC);
-					} catch (InterruptedException e) {
-						e.printStackTrace();
-					}
-				}
-				
 				if (connectedToServer)
 					disconnectClient();
 				
@@ -272,7 +242,7 @@ public class ApplicationSwing extends JFrame {
 		return menu;
 	}
 	
-	
+	/* Créer le menu "Network". */
 	private JMenu createNetworkMenu() {
 		JMenu menu = ApplicationSupport.addMenu(this, "Network", new String[] {"Server address", "Connect", "Disconnect"});
 		
@@ -341,12 +311,24 @@ public class ApplicationSwing extends JFrame {
 		return menu;
 	}
 
+	/**
+	 * Désactive l'affichage des formes si nécessaire et déconnecte le client.
+	 */
 	private void disconnectClient() {
 		assert connectedToServer;
 		
+		if (workerActif) {
+			workerActif = false;
+
+			try {
+				Thread.sleep(DELAI_QUITTER_MSEC);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
+		
 		try {
 			connection.close();
-			workerActif = false;
 			connectedToServer = false;
 			rafraichirMenus();
 			System.out.println("Connexion diestablished with \"" + serverAddress + ":" + serverPort + "\"");
