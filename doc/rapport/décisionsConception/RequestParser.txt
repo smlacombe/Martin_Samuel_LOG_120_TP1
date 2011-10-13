@@ -2,12 +2,14 @@ Au moment d'implémenter la fonction ShapeFactory.makeShape(), nous avons défin
 
 Puisque qu'il y avait deux étapes distinctes à réaliser, nous avons décidé de les placer dans deux méthodes distinctes. La première serait chargée d'analyser la chaine de caractères et la seconde procéderait à l'instanciation.
 
-Seulement, il y avait plusieures informations à retirer de la chaine de caractères et le language Java ne nous offrait que peu de moyen de transmettre ces informations : une fonction ne peut retourner qu'une seule variable et une fonction ne peut prendre de paramètre par référence afin de les utiliser comme paramètres de sortie.
+Cependant, il y avait plusieurs informations à retirer de la chaine de caractères et nous n'avions que peu de moyen de transmettre ces informations : une fonction ne peut retourner qu'une seule variable et, en Java, une fonction ne peut prendre de paramètre par référence afin de les utiliser comme paramètres de sortie.
 
-Nous avons évalués plusieures solutions. Nous pourrions avoir un certain nombre de variables globales auxquelles les deux méthodes aurraient accès et pourraient modifier. Nous pourrions aussi écrire une structure ayant des attributs publique que se chargeraient de remplir et de retourner la première fonction et que pourraient lire la seconde.
+Nous avons évalués plusieurs solutions. Nous pourrions avoir un certain nombre de variables globales auxquelles les deux méthodes aurraient accès et pourraient modifier. Nous pourrions aussi écrire une structure ayant des attributs publique que se chargeraient de remplir et de retourner la première fonction et que pourrait lire la seconde.
 
-Au final, nous avons décidé d'utiliser une variante plus rafinée de cette dernière solution : nous avons écrite une classe "RequestParser" qui offre une méthode "RequestParser.parse()" qui prend une chaine de caractères en paramètre et se charge de l'analyser. Les informations extraites sont ensuite disponnibles à partir de différents accesseurs.
+Au final, nous avons décidé d'utiliser une variante plus rafinée de cette dernière solution : nous avons écrit une classe "RequestParser" qui offre une méthode "RequestParser.parse()" qui prend une chaine de caractères en paramètre et se charge de l'analyser. Les informations extraites sont ensuite disponibles à partir de différents accesseurs.
 
 Cette façon de faire permet à la méthode "ShapeFactory.makeShape()" d'instancier un objet local de type "RequestParser", d'utiliser sa fonction "RequestParser.parse()" et d'accéder à toutes les informations souhaitées. Une fois ceci fait, l'objet peut être détruit.
 
-Ainsi, aucune variable global n'a été ajouté et le travail a été compartimenté de façon à ce que chaque classe ne soit responssable que d'une seule tâche. Le déboguage en est ainsi façilité et deux il est possible à deux personnes de travailler simultanément sur les deux classes de manière indépendante.
+Ainsi, aucune variable globale n'a été ajoutée et le travail a été compartimenté de façon à ce que chaque classe ne soit responssable que d'une seule tâche. Le déboguage en est ainsi façilité et il est possible à deux personnes de travailler simultanément sur les deux classes de manière indépendante.
+
+Cette solution offre un bon niveau de cohésion fonctionnelle puisque ce sont deux classes distinctes qui sont chargées d'effectuer deux tâches distinctes. Cette séparation offre un niveau de couplage raisonnable puisque l'implémentation de la classe « RequestParser » sans que cela affecte l'utilisation les classes utilisatrices.
