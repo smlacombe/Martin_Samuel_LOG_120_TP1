@@ -147,7 +147,7 @@ public class ApplicationSwing extends JFrame {
 	private Queue<ets.log120.tp1.Shape> queue = new Queue<ets.log120.tp1.Shape>();
 	private String serverAddress;
 	private int serverPort;
-	private ets.log120.tp1.NetworkClient connexion;
+	private ets.log120.tp1.NetworkClient connection;
 	private boolean workerActif, connectedToServer;
 	private JMenuItem arreterMenuItem, demarrerMenuItem, disconnectMenuItem, connectMenuItem, serverAddressMenuItem;
 	
@@ -172,7 +172,7 @@ public class ApplicationSwing extends JFrame {
 		protected void dessinerFormes() {
 			try {
 				while (workerActif) {
-					String request = connexion.getShapeRequest();
+					String request = connection.getShapeRequest();
 					System.out.println(request);
 					queue.push(ShapeFactory.makeShape(request));
 					if(queue.size() > NOMBRE_DE_FORMES)
@@ -341,7 +341,7 @@ public class ApplicationSwing extends JFrame {
 					assert serverAddress != null;
 					assert serverPort != 0;
 					
-					connexion = new ets.log120.tp1.NetworkClient(serverAddress, serverPort);
+					connection = new ets.log120.tp1.NetworkClient(serverAddress, serverPort);
 					connectedToServer = true;
 					rafraichirMenus();
 					
@@ -391,7 +391,7 @@ public class ApplicationSwing extends JFrame {
 		assert connectedToServer;
 		
 		try {
-			connexion.close();
+			connection.close();
 			workerActif = false;
 			connectedToServer = false;
 			rafraichirMenus();
