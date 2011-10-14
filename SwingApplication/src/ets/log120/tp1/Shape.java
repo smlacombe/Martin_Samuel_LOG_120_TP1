@@ -1,7 +1,7 @@
 package ets.log120.tp1;
 
 /**
- * Forme qui pourra être affichée dans un environement graphique.
+ * Forme qui pourra être affichée dans un environnement graphique.
  * 
  * @author Samuel Milette-Lacombe
  * @author Martin Desharnais
@@ -47,7 +47,7 @@ public abstract class Shape {
 	// ///////////////////////////////////////////////
 
 	/**
-	 * Dessine la forme sur l'environement graphique reçu en paramètre.
+	 * Dessine la forme sur l'environnement graphique reçu en paramètre.
 	 */
 	public void draw(java.awt.Graphics g) {
 		g.setColor(color);

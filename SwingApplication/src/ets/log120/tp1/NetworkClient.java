@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.net.UnknownHostException;
 
 /**
- * Client chargé de communique avec le serveur.
+ * Client chargé de communiquer avec le serveur.
  * 
  * @author Martin Desharnais
  * @author Samuel Milette-Lacombe
@@ -16,10 +16,10 @@ public class NetworkClient {
 	//////////////////////////////////////////////////
 	
 	/**
-	 * Construit un client et le connecte au serveur à l'aide de l'adresse et du port reçus en paramètre.
+	 * Construit un client et le connecte au serveur à l'aide de l'adresse et du port reçu en paramètre.
 	 */
-	public NetworkClient(String serverName, int serverPort) throws UnknownHostException, IOException {
-		socket = new java.net.Socket(serverName, serverPort);
+	public NetworkClient(String serverAddress, int serverPort) throws UnknownHostException, IOException {
+		socket = new java.net.Socket(serverAddress, serverPort);
 		out = new java.io.PrintStream(socket.getOutputStream());
 		in = new java.io.BufferedReader(new java.io.InputStreamReader(socket.getInputStream()));
 	}
@@ -32,9 +32,9 @@ public class NetworkClient {
 	 * Retourne la prochaine requête reçue du serveur.
 	 */
 	public String getShapeRequest() throws IOException {
-			in.readLine();
-			out.println("GET");
-			return in.readLine();
+		in.readLine();
+		out.println("GET");
+		return in.readLine();
 	}
 	
 	/**

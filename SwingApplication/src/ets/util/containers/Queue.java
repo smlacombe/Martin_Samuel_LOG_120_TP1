@@ -51,7 +51,7 @@ public class Queue<T> implements Iterable<T> {
 	}
 
 	/**
-	 * Retourne l'élément situé é la fin de la file.
+	 * Retourne l'élément situé à la fin de la file.
 	 */
 	public T back() throws Exception {
 		if (top == -1)
@@ -72,7 +72,7 @@ public class Queue<T> implements Iterable<T> {
 	// ////////////////////////////////////////////////
 
 	/**
-	 * Ajoute un élément é la fin de la file.
+	 * Ajoute un élément à la fin de la file.
 	 */
 	public void push(T newElement) {
 		if (top == array.length - 1) {

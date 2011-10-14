@@ -74,39 +74,8 @@ import ets.log120.tp1.ShapeFactory;
  */
 
 public class ApplicationSwing extends JFrame {
-	private static final int CANEVAS_HAUTEUR = 500;
-	private static final int CANEVAS_LARGEUR = 500;
-	private static final int DELAI_ENTRE_FORMES_MSEC = 1000;
-	private static final int DELAI_QUITTER_MSEC = 200;
-	private static final int FORME_MAX_HAUTEUR = 200;
-	private static final int FORME_MAX_LARGEUR = 200;
-	private static final int MARGE_H = 50;
-	private static final int MARGE_V = 60;
-	private static final int MENU_DESSIN_ARRETER_TOUCHE_MASK = ActionEvent.CTRL_MASK;
-	private static final char MENU_DESSIN_ARRETER_TOUCHE_RACC = KeyEvent.VK_A;
-	private static final int MENU_DESSIN_DEMARRER_TOUCHE_MASK = ActionEvent.CTRL_MASK;
-	private static final char MENU_DESSIN_DEMARRER_TOUCHE_RACC = KeyEvent.VK_D;
-	private static final int MENU_FICHIER_QUITTER_TOUCHE_MASK = ActionEvent.CTRL_MASK;
-	private static final char MENU_FICHIER_QUITTER_TOUCHE_RACC = KeyEvent.VK_Q;
-	private static final String
-			MENU_FICHIER_TITRE = "app.frame.menus.file.title",
-			MENU_FICHIER_QUITTER = "app.frame.menus.file.exit",
-			MENU_DESSIN_TITRE = "app.frame.menus.draw.title",
-			MENU_DESSIN_DEMARRER = "app.frame.menus.draw.start",
-			MENU_DESSIN_ARRETER = "app.frame.menus.draw.stop",
-			MENU_AIDE_TITRE = "app.frame.menus.help.title",
-			MENU_AIDE_PROPOS = "app.frame.menus.help.about";
-	private static final String MESSAGE_DIALOGUE_A_PROPOS = "app.frame.dialog.about";
-	private static final int NOMBRE_DE_FORMES = 10;
-	private static final long serialVersionUID = 1L;
-	private Queue<ets.log120.tp1.Shape> queue = new Queue<ets.log120.tp1.Shape>();
-	private String serverAddress;
-	private int serverPort;
-	private ets.log120.tp1.NetworkClient connection;
-	private boolean workerActif, connectedToServer;
-	private JMenuItem arreterMenuItem, demarrerMenuItem, disconnectMenuItem, connectMenuItem, serverAddressMenuItem;
-	
-	/* Traiter l'item "Start". */
+		
+	/** Traiter l'item "Start". */
 	class DemarrerListener implements ActionListener {
 		public void actionPerformed(ActionEvent arg0) {
 			final SwingWorker worker = new SwingWorker() {
@@ -124,6 +93,9 @@ public class ApplicationSwing extends JFrame {
 			rafraichirMenus();
 		}
 		
+		/**
+		 * Gère l'approvisionnement en formes à des fins d'affichage.
+		 */
 		protected void dessinerFormes() {
 			try {
 				while (workerActif) {
@@ -155,7 +127,7 @@ public class ApplicationSwing extends JFrame {
 		}
 	}
 
-	/* Cr�er le panneau sur lequel les formes sont dessin�es. */
+	/** Créer le panneau sur lequel les formes sont dessinées. */
 	class CustomCanvas extends JPanel {
 		private static final long serialVersionUID = 1L;
 
@@ -171,7 +143,7 @@ public class ApplicationSwing extends JFrame {
 
 		public void paintComponent(Graphics g) {
 			super.paintComponent(g);
-			//on efface l'�cran avec un rectangle vierge de la taille de la fen�tre
+			//on efface l'écran avec un rectangle vierge de la taille de la fenétre
 			//g.clearRect(0, 0, getContentPane().getWidth(), getContentPane().getHeight());	
 				
 			Graphics2D g2d = (Graphics2D) g;
@@ -184,7 +156,13 @@ public class ApplicationSwing extends JFrame {
 		}
 	}
 	
-	/* - Constructeur - Cr�er le cadre dans lequel les formes sont dessin�es. */
+	// ////////////////////////////////////////////////
+	// Constructeur(s)
+	// ////////////////////////////////////////////////
+	
+	/**
+	 * Créer le cadre dans lequel les formes sont dessinées.
+	 */
 	public ApplicationSwing() {
 		getContentPane().add(new JScrollPane(new CustomCanvas()));
 		this.addWindowListener(new WindowAdapter() {
@@ -198,7 +176,7 @@ public class ApplicationSwing extends JFrame {
 		});
 	}
 
-	/* Cr�er le menu "Draw". */
+	/** Créer le menu "Draw". */
 	private JMenu creerMenuDessiner() {
 		JMenu menu = ApplicationSupport.addMenu(this, MENU_DESSIN_TITRE,
 				new String[] { MENU_DESSIN_DEMARRER, MENU_DESSIN_ARRETER });
@@ -224,7 +202,7 @@ public class ApplicationSwing extends JFrame {
 		return menu;
 	}
 
-	/* Cr�er le menu "File". */
+	/** Créer le menu "File". */
 	private JMenu creerMenuFichier() {
 		JMenu menu = ApplicationSupport.addMenu(this, MENU_FICHIER_TITRE,new String[] { MENU_FICHIER_QUITTER });
 
@@ -242,19 +220,22 @@ public class ApplicationSwing extends JFrame {
 		return menu;
 	}
 	
-	/* Créer le menu "Network". */
+	/** Créer le menu "Network". */
 	private JMenu createNetworkMenu() {
-		JMenu menu = ApplicationSupport.addMenu(this, "Network", new String[] {"Server address", "Connect", "Disconnect"});
+		JMenu menu = ApplicationSupport.addMenu(this, MENU_NETWORK_TITLE,
+				new String[] {MENU_NETWORK_SERVER_ADDRESS, MENU_NETWORK_CONNECT, MENU_NETWORK_DISCONNECT});
 		
 		serverAddressMenuItem = menu.getItem(0);
 		serverAddressMenuItem.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				String result = JOptionPane.showInputDialog("Quel est le nom d'hôte et le port du serveur de forme?");
-				serverAddress = result.substring(0, result.indexOf(":"));
-				serverPort = Integer.parseInt(result.substring(result.indexOf(":") + 1));
-				rafraichirMenus();
-				System.out.println("Server address changed to \"" + serverAddress + ":" + serverPort + "\"");
+				if (result != null) {
+					serverAddress = result.substring(0, result.indexOf(":"));
+					serverPort = Integer.parseInt(result.substring(result.indexOf(":") + 1));
+					rafraichirMenus();
+					System.out.println("Server address changed to \"" + serverAddress + ":" + serverPort + "\"");
+				}
 			}
 		});
 		
@@ -295,7 +276,7 @@ public class ApplicationSwing extends JFrame {
 	}
 	
 
-	/* Créer le menu "Help". */
+	/** Créer le menu "Help". */
 	private JMenu creerMenuAide() {
 		JMenu menu = ApplicationSupport.addMenu(this, MENU_AIDE_TITRE,
 				new String[] { MENU_AIDE_PROPOS });
@@ -315,6 +296,7 @@ public class ApplicationSwing extends JFrame {
 	 * Désactive l'affichage des formes si nécessaire et déconnecte le client.
 	 */
 	private void disconnectClient() {
+		//La précondition est que le client doit être connecté au serveur.
 		assert connectedToServer;
 		
 		if (workerActif) {
@@ -338,27 +320,37 @@ public class ApplicationSwing extends JFrame {
 		}
 	}
 	
-	/* Activer ou désactiver les items du menu selon la sélection. */
+	/**
+	 * Activer ou désactiver les items du menu selon la sélection. 
+	*/
 	private void rafraichirMenus() {
 		demarrerMenuItem.setEnabled(connectedToServer && !workerActif);
 		arreterMenuItem.setEnabled(connectedToServer && workerActif);
 		serverAddressMenuItem.setEnabled(!connectedToServer);
-		
-		if (serverAddress == null && serverPort == 0)
-			try {
-				serverAddress = ApplicationSupport.getHostName();
-				serverPort = ApplicationSupport.getPortNumber();
-				System.out.println("Server address taken from configuration file :\"" + serverAddress + ":" + serverPort + "\"");
-			} catch (java.util.MissingResourceException ex) {
-				serverAddress = null;
-				serverPort = 0;			
-			}
-			
 		connectMenuItem.setEnabled(!connectedToServer && serverAddress != null && serverPort != 0);
 		disconnectMenuItem.setEnabled(connectedToServer);
 	}
 	
-	/* Lancer l'exécution de l'application. */
+	/**
+	 * Charge les préférences de l'utilisateur.
+	 * Établit si le fichier de préférences prefs.properties contient l'adresse du serveur et le port.
+	 * Si aucune information de ces infos n'est contenue dans le fichier, l'utilisateur devra les entrer avant de pouvoir se connecter.
+	 */
+	private void loadPreferences() {
+		try {
+			serverAddress = ApplicationSupport.getHostName();
+			serverPort = ApplicationSupport.getPortNumber();
+			System.out.println("Server address taken from configuration file :\"" + serverAddress + ":" + serverPort + "\"");
+		} catch (java.util.MissingResourceException ex) {
+			serverAddress = null;
+			serverPort = 0;			
+		}
+	}
+	
+	
+	/**
+	 *  Lancer l'exécution de l'application. 
+	 */
 	public static void main(String[] args) {
 		
 		/* Créer la fenêtre de l'application. */
@@ -368,6 +360,7 @@ public class ApplicationSwing extends JFrame {
 		cadre.creerMenuDessiner();
 		cadre.createNetworkMenu();
 		cadre.creerMenuAide();
+		cadre.loadPreferences();
 		cadre.rafraichirMenus();
 
 		/* Centrer la fenêtre. */
@@ -378,4 +371,44 @@ public class ApplicationSwing extends JFrame {
 				.getResource("app.frame.title"), 0, 0, CANEVAS_LARGEUR
 				+ MARGE_H, CANEVAS_HAUTEUR + MARGE_V);
 	}
+	
+	// ////////////////////////////////////////////////
+	// Attribut(s)
+	// ////////////////////////////////////////////////
+	
+	private static final int CANEVAS_HAUTEUR = 500;
+	private static final int CANEVAS_LARGEUR = 500;
+	private static final int DELAI_ENTRE_FORMES_MSEC = 1000;
+	private static final int DELAI_QUITTER_MSEC = 200;
+	private static final int FORME_MAX_HAUTEUR = 200;
+	private static final int FORME_MAX_LARGEUR = 200;
+	private static final int MARGE_H = 50;
+	private static final int MARGE_V = 60;
+	private static final int MENU_DESSIN_ARRETER_TOUCHE_MASK = ActionEvent.CTRL_MASK;
+	private static final char MENU_DESSIN_ARRETER_TOUCHE_RACC = KeyEvent.VK_A;
+	private static final int MENU_DESSIN_DEMARRER_TOUCHE_MASK = ActionEvent.CTRL_MASK;
+	private static final char MENU_DESSIN_DEMARRER_TOUCHE_RACC = KeyEvent.VK_D;
+	private static final int MENU_FICHIER_QUITTER_TOUCHE_MASK = ActionEvent.CTRL_MASK;
+	private static final char MENU_FICHIER_QUITTER_TOUCHE_RACC = KeyEvent.VK_Q;
+	private static final String
+			MENU_FICHIER_TITRE = "app.frame.menus.file.title",
+			MENU_FICHIER_QUITTER = "app.frame.menus.file.exit",
+			MENU_DESSIN_TITRE = "app.frame.menus.draw.title",
+			MENU_DESSIN_DEMARRER = "app.frame.menus.draw.start",
+			MENU_DESSIN_ARRETER = "app.frame.menus.draw.stop",
+			MENU_AIDE_TITRE = "app.frame.menus.help.title",
+			MENU_AIDE_PROPOS = "app.frame.menus.help.about",
+			MENU_NETWORK_TITLE = "app.frame.menus.network.title",
+			MENU_NETWORK_SERVER_ADDRESS = "app.frame.menus.network.serverAddress",
+			MENU_NETWORK_CONNECT = "app.frame.menus.network.connect",
+			MENU_NETWORK_DISCONNECT = "app.frame.menus.network.disconnect";
+	private static final String MESSAGE_DIALOGUE_A_PROPOS = "app.frame.dialog.about";
+	private static final int NOMBRE_DE_FORMES = 10;
+	private static final long serialVersionUID = 1L;
+	private Queue<ets.log120.tp1.Shape> queue = new Queue<ets.log120.tp1.Shape>();
+	private String serverAddress;
+	private int serverPort;
+	private ets.log120.tp1.NetworkClient connection;
+	private boolean workerActif, connectedToServer;
+	private JMenuItem arreterMenuItem, demarrerMenuItem, disconnectMenuItem, connectMenuItem, serverAddressMenuItem;
 }

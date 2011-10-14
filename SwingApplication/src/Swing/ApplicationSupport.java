@@ -18,36 +18,11 @@ import java.util.*;
 import javax.swing.*;
 
 public final class ApplicationSupport {
-   static private final String PREFS_BUNDLE_BASENAME = "prefs";
-   static private final String BUNDLE_BASENAME = "app";
-   static private final String PREFERRED_LOCALE_KEY = "locale";
-   static private final String PREFERED_HOST_NAME = "host_name";
-   static private final String PREFERED_PORT_NUMBER = "port_number";
 
-   static private final JPanel STATUS_AREA = new JPanel();
-   static private final JLabel STATUS = new JLabel();
-   static private ResourceBundle preferences, resources;
-   static private Locale locale;
-
-   static {
-      try {
-         preferences = ResourceBundle.getBundle(PREFS_BUNDLE_BASENAME);
-         locale = new Locale(preferences.getString(PREFERRED_LOCALE_KEY));
-      }
-      catch(java.util.MissingResourceException ex) {
-         System.err.println("ERROR: cannot find preferences properties file " + 
-                            BUNDLE_BASENAME);
-      }
-
-      try {
-         resources = ResourceBundle.getBundle(BUNDLE_BASENAME, locale);
-      }
-      catch(java.util.MissingResourceException ex) {
-         System.err.println("ERROR: cannot find properties file for " + BUNDLE_BASENAME);
-      }
-
-   };
-
+	// ////////////////////////////////////////////////
+	// Constructeur(s)
+	// ////////////////////////////////////////////////
+	
    // disallow direct instantiation
    private ApplicationSupport() {}
    
@@ -107,7 +82,7 @@ public final class ApplicationSupport {
 	  try {
 		  return (resources == null) ? null : resources.getString(key);
 	  } catch (MissingResourceException e) {
-		  return key;
+		  return "**" + key + "**";
 	  }
    }
    
@@ -116,4 +91,38 @@ public final class ApplicationSupport {
       MessageFormat fmt = new MessageFormat(pattern);
       return fmt.format(params);
    }
+   
+   	// ////////////////////////////////////////////////
+	// Attribut(s)
+	// ////////////////////////////////////////////////
+   
+   static private final String PREFS_BUNDLE_BASENAME = "prefs";
+   static private final String BUNDLE_BASENAME = "app";
+   static private final String PREFERRED_LOCALE_KEY = "locale";
+   static private final String PREFERED_HOST_NAME = "host_name";
+   static private final String PREFERED_PORT_NUMBER = "port_number";
+
+   static private final JPanel STATUS_AREA = new JPanel();
+   static private final JLabel STATUS = new JLabel();
+   static private ResourceBundle preferences, resources;
+   static private Locale locale;
+   
+   static {
+	      try {
+	         preferences = ResourceBundle.getBundle(PREFS_BUNDLE_BASENAME);
+	         locale = new Locale(preferences.getString(PREFERRED_LOCALE_KEY));
+	      }
+	      catch(java.util.MissingResourceException ex) {
+	         System.err.println("ERROR: cannot find preferences properties file " + 
+	                            BUNDLE_BASENAME);
+	      }
+
+	      try {
+	         resources = ResourceBundle.getBundle(BUNDLE_BASENAME, locale);
+	      }
+	      catch(java.util.MissingResourceException ex) {
+	         System.err.println("ERROR: cannot find properties file for " + BUNDLE_BASENAME);
+	      }
+
+	   };
 }

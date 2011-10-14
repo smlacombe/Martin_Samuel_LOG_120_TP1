@@ -10,13 +10,6 @@ import java.util.regex.Matcher;
  */
 public class RequestParser {
 
-	private static Pattern pattern = Pattern
-			.compile("(\\d+)\\s+<(\\w+)>\\s+(\\d+)\\s+(\\d+)\\s+(\\d+)\\s+(\\d+\\s+)?</\\2>");
-	private String request;
-	private int sequenceNumber;
-	private String shapeType;
-	private int[] values;
-
 	// ////////////////////////////////////////////////
 	// Constructeur(s)
 	// ////////////////////////////////////////////////
@@ -83,10 +76,23 @@ public class RequestParser {
 		if (matcher.find()) {
 			sequenceNumber = Integer.parseInt(matcher.group(1));
 			shapeType = matcher.group(2);
-			values = new int[shapeType.equalsIgnoreCase("CERCLE") ? 3 : 4];
+			values = new int[shapeType.equalsIgnoreCase("CERCLE") ? NB_PARAM_CIRCLE : NB_PARAM_STANDARD_SHAPE];
 
 			for (int i = 0; i < values.length; i++)
 				values[i] = Integer.parseInt(matcher.group(i + 3).trim());
 		}
 	}
+	
+	// ////////////////////////////////////////////////
+	// Attribut(s)
+	// ////////////////////////////////////////////////
+	
+	private static final int NB_PARAM_CIRCLE = 3;
+	private static final int NB_PARAM_STANDARD_SHAPE = 4;
+	private static Pattern pattern = Pattern
+			.compile("(\\d+)\\s+<(\\w+)>\\s+(\\d+)\\s+(\\d+)\\s+(\\d+)\\s+(\\d+\\s+)?</\\2>");
+	private String request;
+	private int sequenceNumber;
+	private String shapeType;
+	private int[] values;
 }
