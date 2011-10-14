@@ -115,11 +115,13 @@ public class ApplicationSwing extends JFrame {
 			} catch (UnknownHostException e) {
 				e.printStackTrace();
 			} catch (java.net.SocketException e) {
-					JOptionPane.showMessageDialog(null, "La connexion avec le serveur a été interrompue. Vérifiez que le serveur est encore ouvert.",
-							"Erreur de serveur introuvable", JOptionPane.WARNING_MESSAGE);
-					workerActif = false;
-					connectedToServer = false;
+				JOptionPane.showMessageDialog(null, ApplicationSupport.getResource("app.frame.dialog.network.message.unattendedDisconnection"),
+					ApplicationSupport.getResource("app.frame.dialog.network.title.disconnectionError"), JOptionPane.WARNING_MESSAGE);
+				System.out.println("Connexion diestablished with \"" + serverAddress + ":" + serverPort + "\"");
+				workerActif = false;
+				connectedToServer = false;
 			} catch (IOException e) {
+				System.out.println("Hello world");
 				e.printStackTrace();
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -143,9 +145,7 @@ public class ApplicationSwing extends JFrame {
 
 		public void paintComponent(Graphics g) {
 			super.paintComponent(g);
-			//on efface l'écran avec un rectangle vierge de la taille de la fenétre
-			//g.clearRect(0, 0, getContentPane().getWidth(), getContentPane().getHeight());	
-				
+							
 			Graphics2D g2d = (Graphics2D) g;
 			
 			for (ets.log120.tp1.Shape s : queue)
@@ -229,11 +229,12 @@ public class ApplicationSwing extends JFrame {
 		serverAddressMenuItem.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				String result = JOptionPane.showInputDialog("Quel est le nom d'hôte et le port du serveur de forme?");
+				String result = JOptionPane.showInputDialog(ApplicationSupport.getResource("app.frame.dialog.network.message.serverInformationQuestion"));
 				if (result != null) {
 					serverAddress = result.substring(0, result.indexOf(":"));
 					serverPort = Integer.parseInt(result.substring(result.indexOf(":") + 1));
 					rafraichirMenus();
+					//à des fins de déboguage, le texte affiché n'est pas traduit.
 					System.out.println("Server address changed to \"" + serverAddress + ":" + serverPort + "\"");
 				}
 			}
@@ -254,10 +255,10 @@ public class ApplicationSwing extends JFrame {
 					System.out.println("Connexion established with \"" + serverAddress + ":" + serverPort + "\"");
 				} catch (UnknownHostException e) {
 					JOptionPane.showMessageDialog(null, "Le nom du serveur « " + serverAddress + " » est impossible à résoudre.",
-						"Erreur DNS", JOptionPane.WARNING_MESSAGE);
+							ApplicationSupport.getResource("app.frame.dialog.network.title.dnsError"), JOptionPane.WARNING_MESSAGE);
 				} catch (java.net.ConnectException e) {
 					JOptionPane.showMessageDialog(null, "Le serveur « " + serverAddress + " » sur le port « " + serverPort + " » est introuvable.",
-						"Erreur de serveur introuvable", JOptionPane.WARNING_MESSAGE);
+							ApplicationSupport.getResource("app.frame.dialog.network.title.serverNotFound"), JOptionPane.WARNING_MESSAGE);
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
@@ -315,8 +316,8 @@ public class ApplicationSwing extends JFrame {
 			rafraichirMenus();
 			System.out.println("Connexion diestablished with \"" + serverAddress + ":" + serverPort + "\"");
 		} catch (IOException ie) {
-			JOptionPane.showMessageDialog(null, "Erreur lors de la déconnexion du serveur.",
-				"Erreur de déconnexion du serveur", JOptionPane.WARNING_MESSAGE);
+			JOptionPane.showMessageDialog(null, ApplicationSupport.getResource("app.frame.dialog.network.message.disconnectionError"),
+			ApplicationSupport.getResource("app.frame.dialog.network.title.disconnectionError"), JOptionPane.WARNING_MESSAGE);
 		}
 	}
 	

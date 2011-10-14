@@ -31,10 +31,16 @@ public class NetworkClient {
 	/**
 	 * Retourne la prochaine requête reçue du serveur.
 	 */
-	public String getShapeRequest() throws IOException {
+	public String getShapeRequest() throws IOException, java.net.SocketException {
 		in.readLine();
 		out.println("GET");
-		return in.readLine();
+		
+		String result = in.readLine();
+		
+		if (result == null)
+			throw new java.net.SocketException();
+		
+		return result;
 	}
 	
 	/**
