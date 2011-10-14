@@ -11,16 +11,16 @@ public class Rectangle extends Shape {
 	// ////////////////////////////////////////////////
 	// Constructeur(s)
 	// ////////////////////////////////////////////////
-
+	
 	/**
-	 * Construit un rectangle avec les informations sur sa taille, sa position et sa couleur.
+	 * Construit un rectangle avec les informations sur sa taille et sa position.
 	 */
 	public Rectangle(int sequenceNumber, int x1, int y1, int x2, int y2) {
 		this(java.awt.Color.RED, sequenceNumber, x1, y1, x2, y2);
 	}
 	
 	/**
-	 * Construit un rectangle avec les informations sur sa taille et sa position.
+	 * Construit un rectangle avec les informations sur sa taille, sa position et sa couleur.
 	 */
 	protected Rectangle(java.awt.Color color, int sequenceNumber, int x1, int y1, int x2, int y2) {
 		super(color, sequenceNumber, x1, y1);

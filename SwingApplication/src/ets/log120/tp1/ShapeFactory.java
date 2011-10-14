@@ -1,14 +1,14 @@
 package ets.log120.tp1;
 
 /**
- * Fabriquant fournissant les formes utilisées par l'application.
+ * Classe métier fabriquant des utilisées par l'application. Cette classe utilise le patron de conception Factory.
  * 
  * @author Martin Desharnais
  */
 public class ShapeFactory {
 	
 	/**
-	 * Retourne une forme correspondant à la requête reçu en paramètre.
+	 * Retourne une forme correspondant à la requête reçue en paramètre.
 	 */
 	public static Shape makeShape(String request) throws IllegalArgumentException {
 		RequestParser parser = new RequestParser(request);
