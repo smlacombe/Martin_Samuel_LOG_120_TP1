@@ -12,16 +12,31 @@ public class List<T> {
 		List<String> l = new List<String>();
 		System.out.println(l);
 		
-		l.push_back("A");
+		l.pushBack("A");
 		System.out.println(l);
 		
-		l.push_back("B");
+		l.pushBack("B");
 		System.out.println(l);
 		
-		l.push_back("C");
+		l.pushBack("C");
 		System.out.println(l);
 		
-		l.push_back("D");
+		l.pushBack("D");
+		System.out.println(l);
+		
+		l.popBack();
+		System.out.println(l);
+		
+		l.popBack();
+		System.out.println(l);
+		
+		l.popBack();
+		System.out.println(l);
+		
+		l.popBack();
+		System.out.println(l);
+		
+		l.popBack();
 		System.out.println(l);
 	}
 	
@@ -72,7 +87,7 @@ public class List<T> {
 	/**
 	 * Insère un nouvel élément à la fin de la liste.
 	 */
-	public void push_back(T newElement) {
+	public void pushBack(T newElement) {
 		Node<T> newNode = new Node<T>();
 		newNode.data = newElement;
 		
@@ -87,6 +102,21 @@ public class List<T> {
 		rbegin = newNode;
 		
 		++elementCount;
+	}
+	
+	/**
+	 * Supprime l'élément situé à la fin de la liste.
+	 */
+	public void popBack() {
+		if(rbegin != null) {
+			if(rbegin.prior != null) {
+				rbegin.prior.next = null;
+				rbegin = rbegin.prior;
+			} else {
+				begin = null;
+				rbegin = null;
+			}
+		}
 	}
 	
 	//////////////////////////////////////////////////
