@@ -74,55 +74,6 @@ public class List<T> {
 
 		return result;
 	}
-	
-	public void sort(Comparator<T> comp) {
-        //Enter loop only if there are elements in list
-        boolean swapped = (begin != null);
-
-        // Only continue loop if a swap is made
-        while (swapped)
-        {
-            swapped = false;
-
-            // Maintain pointers
-            Node<T> curr = begin;
-            Node<T> next = curr.next;
-            Node<T> prev = null;
-
-            // Cannot swap last element with its next
-            while (next != null)
-            {
-                // swap if items in wrong order
-                if (comp.compare(curr.data, next.data) < 0)
-                {
-                    // notify loop to do one more pass
-                    swapped = true;
-
-                    // swap elements (swapping head in special case
-                    if (curr == begin)
-                    {
-                        begin = next;
-                        Node<T> temp = next.next;
-                        next.next = curr;
-                        curr.next = temp;
-                        curr = begin;
-                    }
-                    else
-                    {
-                        prev.next = curr.next;
-                        curr.next = next.next;
-                        next.next = curr;
-                        curr = next;
-                    }
-                }
-
-                // move to next element
-                prev = curr;
-                curr = curr.next;
-                next = curr.next;
-            }
-        }
-    }
 
 	// ////////////////////////////////////////////////
 	// Mutateur(s)
@@ -208,13 +159,58 @@ public class List<T> {
 				current.prior.next = null;
 				current.prior = null;
 			}
+			current = current.next;
 		}
 		
 		begin = null;
 		rbegin = null;
 		elementCount = 0;
 	}
-	
+		
+	public void sort(Comparator<T> comp) {
+        //Enter loop only if there are elements in list
+        boolean swapped = (begin != null);
+
+        // Only continue loop if a swap is made
+        while (swapped) {
+            swapped = false;
+
+            // Maintain pointers
+            Node<T> curr = begin;
+            Node<T> next = curr.next;
+            Node<T> prev = null;
+
+            // Cannot swap last element with its next
+            while (next != null) {
+                // swap if items in wrong order
+                if (comp.compare(curr.data, next.data) > 0) {
+                    // notify loop to do one more pass
+                    swapped = true;
+
+                    // swap elements (swapping head in special case
+                    if (curr == begin) {
+                        begin = next;
+                        Node<T> temp = next.next;
+                        next.next = curr;
+                        curr.next = temp;
+                        curr = begin;
+                    }
+                    else {
+                        prev.next = curr.next;
+                        curr.next = next.next;
+                        next.next = curr;
+                        curr = next;
+                    }
+                }
+
+                // move to next element
+                prev = curr;
+                curr = curr.next;
+                next = curr.next;
+            }
+        }
+    }
+
 	// ////////////////////////////////////////////////
 	// Attribut(s)
 	// ////////////////////////////////////////////////
