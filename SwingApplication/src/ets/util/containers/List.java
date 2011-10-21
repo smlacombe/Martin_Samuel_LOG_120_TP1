@@ -64,75 +64,16 @@ public class List<T> {
 	 * Retourne une chaine de caractères représentant de la liste.
 	 */
 	public String toString() {
-		String result = "- ";
+		String result = "";
 		Node<T> current = begin;
 
 		while (current != null) {
-			result += " " + current.data;
+			result += current.data + " ";
 			current = current.next;
 		}
 
 		return result;
 	}
-	
-	/**
-	 * Tri la liste doublement chainée selon le critère du foncteur en paramètre.
-	 * @param comp Foncteur comp qui définit l'ordre de tri.
-	 * /*
-		CODE EMPRUNTÉ :
-		Cette fonction de tri est tiré du site stackoverflow.com.
-		Description: Cette classe permet le tri d'une liste doublement chainée.
-		Auteur à l'origine du code: Carl Smotricz
-		Référence:http://stackoverflow.com/questions/1854870/manually-sorting-a-linked-list-in-java-lexically
-	 */
-	public void sort(Comparator<T> comp) {
-        //Enter loop only if there are elements in list
-        boolean swapped = (begin != null);
-
-        // Only continue loop if a swap is made
-        while (swapped)
-        {
-            swapped = false;
-
-            // Maintain pointers
-            Node<T> curr = begin;
-            Node<T> next = curr.next;
-            Node<T> prev = null;
-
-            // Cannot swap last element with its next
-            while (next != null)
-            {
-                // swap if items in wrong order
-                if (comp.compare(curr.data, next.data) < 0)
-                {
-                    // notify loop to do one more pass
-                    swapped = true;
-
-                    // swap elements (swapping head in special case
-                    if (curr == begin)
-                    {
-                        begin = next;
-                        Node<T> temp = next.next;
-                        next.next = curr;
-                        curr.next = temp;
-                        curr = begin;
-                    }
-                    else
-                    {
-                        prev.next = curr.next;
-                        curr.next = next.next;
-                        next.next = curr;
-                        curr = next;
-                    }
-                }
-
-                // move to next element
-                prev = curr;
-                curr = curr.next;
-                next = curr.next;
-            }
-        }
-    }
 
 	// ////////////////////////////////////////////////
 	// Mutateur(s)
@@ -206,6 +147,79 @@ public class List<T> {
 			--elementCount;
 		}
 	}
+	
+	/**
+	 * Supprime tous les éléments de la liste.
+	 */
+	public void clear() {
+		Node<T> current = begin;
+
+		while (current != null) {
+			if (current.prior != null) {
+				current.prior.next = null;
+				current.prior = null;
+			}
+			current = current.next;
+		}
+		
+		begin = null;
+		rbegin = null;
+		elementCount = 0;
+	}
+	
+	/**
+	 * Tri la liste doublement chainée selon le critère du foncteur en paramètre.
+	 * 
+	 * @param comp Foncteur comp qui définit l'ordre de tri.
+		CODE EMPRUNTÉ :
+		Cette fonction de tri est tiré du site stackoverflow.com.
+		Description: Cette classe permet le tri d'une liste doublement chainée.
+		Auteur à l'origine du code: Carl Smotricz
+		Référence:http://stackoverflow.com/questions/1854870/manually-sorting-a-linked-list-in-java-lexically
+	 */
+	public void sort(Comparator<T> comp) {
+        //Enter loop only if there are elements in list
+        boolean swapped = (begin != null);
+
+        // Only continue loop if a swap is made
+        while (swapped) {
+            swapped = false;
+
+            // Maintain pointers
+            Node<T> curr = begin;
+            Node<T> next = curr.next;
+            Node<T> prev = null;
+
+            // Cannot swap last element with its next
+            while (next != null) {
+                // swap if items in wrong order
+                if (comp.compare(curr.data, next.data) > 0) {
+                    // notify loop to do one more pass
+                    swapped = true;
+
+                    // swap elements (swapping head in special case
+                    if (curr == begin) {
+                        begin = next;
+                        Node<T> temp = next.next;
+                        next.next = curr;
+                        curr.next = temp;
+                        curr = begin;
+                    }
+                    else {
+                        prev.next = curr.next;
+                        curr.next = next.next;
+                        next.next = curr;
+                        curr = next;
+                    }
+                }
+
+                // move to next element
+                prev = curr;
+                curr = curr.next;
+                next = curr.next;
+            }
+        }
+    }
 
 	// ////////////////////////////////////////////////
 	// Attribut(s)
