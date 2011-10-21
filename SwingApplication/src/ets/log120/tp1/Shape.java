@@ -59,6 +59,11 @@ public abstract class Shape {
 	public void draw(java.awt.Graphics g) {
 		g.setColor(color);
 	}
+	
+	/**
+	 * Calculer l'aire de la forme
+	 */	
+	public abstract double getArea();
 
 	// ///////////////////////////////////////////////
 	// Attribut(s)
