@@ -108,7 +108,6 @@ public class List<T> {
 				begin = null;
 				rbegin = null;
 			}
-			--elementCount;
 		}
 	}
 
@@ -143,7 +142,6 @@ public class List<T> {
 				begin = null;
 				rbegin = null;
 			}
-			--elementCount;
 		}
 	}
 
