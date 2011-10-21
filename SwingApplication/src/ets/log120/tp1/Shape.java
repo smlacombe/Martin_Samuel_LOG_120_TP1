@@ -27,6 +27,13 @@ public abstract class Shape {
 	// ///////////////////////////////////////////////
 	// Accesseur(s)
 	// ///////////////////////////////////////////////
+	
+	/**
+	 * Retourne le numéro de séquence de la forme.
+	 */
+	public int getSequenceNumber() {
+		return sequenceNumber;
+	}
 
 	/**
 	 * Retourne la valeur en x de la position du coin supérieur gauche de la forme.
