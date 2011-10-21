@@ -16,15 +16,43 @@ public class Functors {
 		}
 	}
 	
-	public static class AreaAscending implements Comparator<Shape>{
+	public static class AreaAscending implements Comparator<Shape> {
 		@Override
 		public int compare(Shape left, Shape right) {
-			return (int)(left.getArea() - right.getArea());
+			return (int) (left.getArea() - right.getArea());
 		}
 	}
 	
-	public class ShapeTypeAscending {
-		// easy
+	public static class ShapeTypeAscending implements Comparator<Shape> {
+		@Override
+		public int compare(Shape left, Shape right) {
+			int orderLeft;
+			int orderRight;
+			
+			if (left instanceof Square)
+				orderLeft = 1;
+			else if (left instanceof Rectangle)
+				orderLeft = 2;
+			else if (left instanceof Circle)
+				orderLeft = 3;
+			else if (left instanceof Oval)
+				orderLeft = 4;
+			else
+				orderLeft = 5;
+			
+			if (right instanceof Square)
+				orderRight = 1;
+			else if (right instanceof Rectangle)
+				orderRight = 2;
+			else if (right instanceof Circle)
+				orderRight = 3;
+			else if (right instanceof Oval)
+				orderRight = 4;
+			else
+				orderRight = 5;
+			
+			return orderLeft - orderRight;				
+		}
 	}
 	
 	public static class MaxDistanceBetweenPointsAscending implements Comparator<Shape> {

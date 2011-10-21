@@ -25,7 +25,6 @@ public class FunctorsTest {
 		l.pushBack(circle = ShapeFactory.makeShape("100 <CERCLE> 250 250 200 </CERCLE>"));
 		l.pushBack(oval = ShapeFactory.makeShape("500 <OVALE> 100 100 50 75 </OVALE>"));
 	}
-	
 	@Test
 	public void testSequenceNumberAscending() {
 		Iterator<Shape> i = l.iterator();
@@ -47,7 +46,7 @@ public class FunctorsTest {
 	}
 	
 	@Test
-	public void testSequenceNumberDescending() {
+	public void testAreaAscending() {
 		Iterator<Shape> i = l.iterator();
 		
 		assertEquals(i.next(), square);
@@ -55,6 +54,79 @@ public class FunctorsTest {
 		assertEquals(i.next(), line);
 		assertEquals(i.next(), circle);
 		assertEquals(i.next(), oval);
+
+		l.sort(new Functors.AreaAscending());
+		
+		i = l.iterator();
+		
+		assertEquals(i.next(), line);
+		assertEquals(i.next(), rectangle);
+		assertEquals(i.next(), square);
+		assertEquals(i.next(), oval);
+		assertEquals(i.next(), circle);
+	}
+	
+	@Test
+	public void testNotAreaAscending() {
+		Iterator<Shape> i = l.iterator();
+
+		assertEquals(i.next(), square);
+		assertEquals(i.next(), rectangle);
+		assertEquals(i.next(), line);
+		assertEquals(i.next(), circle);
+		assertEquals(i.next(), oval);
+		
+		l.sort(new Functors.Not(new Functors.AreaAscending()));
+		
+		i = l.iterator();
+
+		assertEquals(i.next(), circle);
+		assertEquals(i.next(), oval);
+		assertEquals(i.next(), square);
+		assertEquals(i.next(), rectangle);
+		assertEquals(i.next(), line);
+	}
+	
+	@Test
+	public void testShapeTypeAscending() {
+		Iterator<Shape> i = l.iterator();
+		
+		assertEquals(i.next(), square);
+		assertEquals(i.next(), rectangle);
+		assertEquals(i.next(), line);
+		assertEquals(i.next(), circle);
+		assertEquals(i.next(), oval);
+
+		l.sort(new Functors.ShapeTypeAscending());
+		
+		i = l.iterator();
+
+		assertEquals(i.next(), square);
+		assertEquals(i.next(), rectangle);
+		assertEquals(i.next(), circle);
+		assertEquals(i.next(), oval);
+		assertEquals(i.next(), line);
+	}
+	
+	@Test
+	public void testNotShapeTypeAscending() {
+		Iterator<Shape> i = l.iterator();
+		
+		assertEquals(i.next(), square);
+		assertEquals(i.next(), rectangle);
+		assertEquals(i.next(), line);
+		assertEquals(i.next(), circle);
+		assertEquals(i.next(), oval);
+
+		l.sort(new Functors.Not(new Functors.ShapeTypeAscending()));
+		
+		i = l.iterator();
+
+		assertEquals(i.next(), line);
+		assertEquals(i.next(), oval);
+		assertEquals(i.next(), circle);
+		assertEquals(i.next(), rectangle);
+		assertEquals(i.next(), square);
 		
 		l.sort(new Functors.Not(new Functors.SequenceNumberAscending()));
 		
