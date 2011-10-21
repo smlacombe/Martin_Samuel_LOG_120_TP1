@@ -127,5 +127,14 @@ public class FunctorsTest {
 		assertEquals(i.next(), circle);
 		assertEquals(i.next(), rectangle);
 		assertEquals(i.next(), square);
+		
+		l.sort(new Functors.Not(new Functors.SequenceNumberAscending()));
+		
+		i = l.iterator();
+		assertEquals(i.next(), oval);
+		assertEquals(i.next(), rectangle);
+		assertEquals(i.next(), line);
+		assertEquals(i.next(), square);
+		assertEquals(i.next(), circle);
 	}
 }
