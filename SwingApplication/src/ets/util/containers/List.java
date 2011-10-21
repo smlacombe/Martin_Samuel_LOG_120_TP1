@@ -148,7 +148,17 @@ public class List<T> implements Iterable<T> {
 		rbegin = null;
 		elementCount = 0;
 	}
-		
+	
+	/**
+	 * Tri la liste doublement chainée selon le critère du foncteur en paramètre.
+	 * 
+	 * @param comp Foncteur comp qui définit l'ordre de tri.
+		CODE EMPRUNTÉ :
+		Cette fonction de tri est tiré du site stackoverflow.com.
+		Description: Cette classe permet le tri d'une liste doublement chainée.
+		Auteur à l'origine du code: Carl Smotricz
+		Référence:http://stackoverflow.com/questions/1854870/manually-sorting-a-linked-list-in-java-lexically
+	 */
 	public void sort(Comparator<T> comp) {
         //Enter loop only if there are elements in list
         boolean swapped = (begin != null);
