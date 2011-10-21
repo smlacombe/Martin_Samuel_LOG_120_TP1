@@ -1,6 +1,8 @@
 package ets.util.containers;
 
 import java.util.Comparator;
+import java.util.Iterator;
+import java.util.NoSuchElementException;
 
 /**
  * Conteneur implémentant une liste doublement chainée.
@@ -8,32 +10,7 @@ import java.util.Comparator;
  * @author Martin Desharnais
  * @author Samuel Milette-Lacombe
  */
-public class List<T> {
-
-	public static void main(String[] args) {
-		List<String> l = new List<String>();
-		System.out.println(l);
-
-		l.pushBack("A"); System.out.println(l);
-		l.pushBack("B"); System.out.println(l);
-		l.pushBack("C"); System.out.println(l);
-		l.pushBack("D"); System.out.println(l); 
-
-		l.popBack(); System.out.println(l);
-		l.popBack(); System.out.println(l);
-		l.popBack(); System.out.println(l);
-		l.popBack(); System.out.println(l);
-		
-		l.pushFront("A"); System.out.println(l);
-		l.pushFront("B"); System.out.println(l);
-		l.pushFront("C"); System.out.println(l);
-		l.pushFront("D"); System.out.println(l);
-		
-		l.popFront(); System.out.println(l);
-		l.popFront(); System.out.println(l);
-		l.popFront(); System.out.println(l);
-		l.popFront(); System.out.println(l);
-	}
+public class List<T> implements Iterable<T> {
 
 	// ////////////////////////////////////////////////
 	// Constructeur(s)
@@ -75,6 +52,11 @@ public class List<T> {
 		return result;
 	}
 
+	@Override
+	public Iterator<T> iterator() {
+		return new ListIterator<T>(begin);
+	}
+	
 	// ////////////////////////////////////////////////
 	// Mutateur(s)
 	// ////////////////////////////////////////////////
@@ -227,5 +209,32 @@ public class List<T> {
 		public Node<D> prior;
 		public Node<D> next;
 		public D data;
+	}
+	
+	private class ListIterator<E> implements Iterator<E> {
+		public ListIterator(Node<E> node) {
+			next = node;
+		}
+		
+		@Override
+		public boolean hasNext() {
+			return next != null;
+		}
+
+		@Override
+		public E next() {
+			if (next == null)
+				throw new NoSuchElementException();
+			E data = next.data;
+			next = next.next;
+			return data;
+		}
+
+		@Override
+		public void remove() {
+			throw new UnsupportedOperationException();
+		}
+		
+		Node<E> next;
 	}
 }
