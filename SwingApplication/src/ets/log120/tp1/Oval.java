@@ -41,7 +41,7 @@ public class Oval extends Shape {
 	
 	@Override
 	public double getArea() {
-		return Math.PI * getX() * getY();
+		return Math.PI * width * height;
 	}
 
 	// ////////////////////////////////////////////////
