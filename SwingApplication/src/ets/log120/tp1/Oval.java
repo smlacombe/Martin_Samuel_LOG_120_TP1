@@ -29,6 +29,20 @@ public class Oval extends Shape {
 	}
 
 	// ////////////////////////////////////////////////
+	// Accesseur(s)
+	// ////////////////////////////////////////////////
+	
+	@Override
+	public double getArea() {
+		return Math.PI * getX() * getY();
+	}
+	
+	@Override
+	public double getMaxDistanceBetweenPoints() {
+		return (height > width) ? height : width;
+	}
+	
+	// ////////////////////////////////////////////////
 	// Méthode(s)
 	// ////////////////////////////////////////////////
 
@@ -37,11 +51,6 @@ public class Oval extends Shape {
 		super.draw(g);
 		g.drawOval(getX(), getY(), width, height);
 		g.fillOval(getX(), getY(), width, height);
-	}
-	
-	@Override
-	public double getArea() {
-		return Math.PI * getX() * getY();
 	}
 
 	// ////////////////////////////////////////////////

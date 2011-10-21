@@ -1,5 +1,7 @@
 package ets.log120.tp1;
 
+import java.awt.geom.Point2D;
+
 /**
  * Spécialisation d'une forme permettant d'afficher un rectangle.
  * 
@@ -24,8 +26,24 @@ public class Rectangle extends Shape {
 	 */
 	protected Rectangle(java.awt.Color color, int sequenceNumber, int x1, int y1, int x2, int y2) {
 		super(color, sequenceNumber, x1, y1);
+		this.x2 = x2;
+		this.y2 = y2;
 		height = y2 - y1;
 		width = x2 - x1;
+	}
+	
+	// ////////////////////////////////////////////////
+	// Accesseur(s)
+	// ////////////////////////////////////////////////
+	
+	@Override
+	public double getArea() {
+		return getX() * getY();
+	}
+	
+	@Override
+	public double getMaxDistanceBetweenPoints() {
+		return Point2D.distance(getX(), getY(), x2, y2);
 	}
 
 	// ////////////////////////////////////////////////
@@ -38,16 +56,13 @@ public class Rectangle extends Shape {
 		g.drawRect(getX(), getY(), width, height);
 		g.fillRect(getX(), getY(), width, height);
 	}
-	
-	@Override
-	public double getArea() {
-		return getX() * getY();
-	}
 
 	// ////////////////////////////////////////////////
 	// Attribut(s)
 	// ////////////////////////////////////////////////
 
+	private int x2;
+	private int y2;
 	private int height;
 	private int width;
 }

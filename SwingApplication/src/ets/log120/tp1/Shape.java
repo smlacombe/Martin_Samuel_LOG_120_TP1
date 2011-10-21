@@ -61,9 +61,14 @@ public abstract class Shape {
 	}
 	
 	/**
-	 * Calculer l'aire de la forme
+	 * Retourne l'aire de la forme.
 	 */	
 	public abstract double getArea();
+	
+	/**
+	 * Retourne la plus grande entre deux points de la forme.
+	 */
+	public abstract double getMaxDistanceBetweenPoints();
 
 	// ///////////////////////////////////////////////
 	// Attribut(s)

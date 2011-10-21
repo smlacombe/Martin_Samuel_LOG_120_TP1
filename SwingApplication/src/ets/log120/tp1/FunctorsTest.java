@@ -65,4 +65,44 @@ public class FunctorsTest {
 		assertEquals(i.next(), square);
 		assertEquals(i.next(), circle);
 	}
+	
+	@Test
+	public void testMaxDistanceBetweenPointsAscending() {
+		Iterator<Shape> i = l.iterator();
+		
+		assertEquals(i.next(), square);
+		assertEquals(i.next(), rectangle);
+		assertEquals(i.next(), line);
+		assertEquals(i.next(), circle);
+		assertEquals(i.next(), oval);
+		
+		l.sort(new Functors.MaxDistanceBetweenPointsAscending());
+		
+		i = l.iterator();
+		assertEquals(i.next(), line);
+		assertEquals(i.next(), rectangle);
+		assertEquals(i.next(), square);
+		assertEquals(i.next(), oval);
+		assertEquals(i.next(), circle);
+	}
+
+	@Test
+	public void testMaxDistanceBetweenPointsDescending() {
+		Iterator<Shape> i = l.iterator();
+		
+		assertEquals(i.next(), square);
+		assertEquals(i.next(), rectangle);
+		assertEquals(i.next(), line);
+		assertEquals(i.next(), circle);
+		assertEquals(i.next(), oval);
+		
+		l.sort(new Functors.Not(new Functors.MaxDistanceBetweenPointsAscending()));
+		
+		i = l.iterator();
+		assertEquals(i.next(), circle);
+		assertEquals(i.next(), oval);
+		assertEquals(i.next(), square);
+		assertEquals(i.next(), rectangle);
+		assertEquals(i.next(), line);
+	}
 }

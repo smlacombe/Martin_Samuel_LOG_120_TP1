@@ -27,8 +27,11 @@ public class Functors {
 		// easy
 	}
 	
-	public class MaxDistanceBetweenPointsAscending {
-		// Difficult
+	public static class MaxDistanceBetweenPointsAscending implements Comparator<Shape> {
+		@Override
+		public int compare(Shape left, Shape right) {
+			return (int)(left.getMaxDistanceBetweenPoints() - right.getMaxDistanceBetweenPoints());
+		}
 	}
 	
 	public static class Not implements Comparator<Shape>{

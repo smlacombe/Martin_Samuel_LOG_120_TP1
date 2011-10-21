@@ -22,7 +22,21 @@ public class Line extends Shape {
 		this.x2 = x2;
 		this.y2 = y2;
 	}
-
+	
+	//////////////////////////////////////////////////
+	// Accesseur(s)
+	//////////////////////////////////////////////////
+	
+	@Override
+	public double getArea() {
+		return Point2D.distance(getX(), getY(), x2, y2);
+	}
+	
+	@Override
+	public double getMaxDistanceBetweenPoints() {
+		return Point2D.distance(getX(), getY(), x2, y2);
+	}
+	
 	//////////////////////////////////////////////////
 	// Méthode(s)
 	//////////////////////////////////////////////////
@@ -31,11 +45,6 @@ public class Line extends Shape {
 	public void draw(java.awt.Graphics g) {
 		super.draw(g);
 		g.drawLine(getX(), getY(), x2, y2);
-	}
-	
-	@Override
-	public double getArea() {
-		return Point2D.distance(getX(), getY(), x2, y2);
 	}
 
 	//////////////////////////////////////////////////
