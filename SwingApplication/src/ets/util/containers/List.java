@@ -62,11 +62,11 @@ public class List<T> {
 	 * Retourne une chaine de caractères représentant de la liste.
 	 */
 	public String toString() {
-		String result = "- ";
+		String result = "";
 		Node<T> current = begin;
 
 		while (current != null) {
-			result += " " + current.data;
+			result += current.data + " ";
 			current = current.next;
 		}
 
@@ -145,7 +145,25 @@ public class List<T> {
 			--elementCount;
 		}
 	}
+	
+	/**
+	 * Supprime tous les éléments de la liste.
+	 */
+	public void clear() {
+		Node<T> current = begin;
 
+		while (current != null) {
+			if (current.prior != null) {
+				current.prior.next = null;
+				current.prior = null;
+			}
+		}
+		
+		begin = null;
+		rbegin = null;
+		elementCount = 0;
+	}
+	
 	// ////////////////////////////////////////////////
 	// Attribut(s)
 	// ////////////////////////////////////////////////
