@@ -38,6 +38,11 @@ public class Rectangle extends Shape {
 		g.drawRect(getX(), getY(), width, height);
 		g.fillRect(getX(), getY(), width, height);
 	}
+	
+	@Override
+	public double getArea() {
+		return getX() * getY();
+	}
 
 	// ////////////////////////////////////////////////
 	// Attribut(s)

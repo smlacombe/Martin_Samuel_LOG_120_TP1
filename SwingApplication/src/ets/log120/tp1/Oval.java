@@ -38,6 +38,11 @@ public class Oval extends Shape {
 		g.drawOval(getX(), getY(), width, height);
 		g.fillOval(getX(), getY(), width, height);
 	}
+	
+	@Override
+	public double getArea() {
+		return Math.PI * getX() * getY();
+	}
 
 	// ////////////////////////////////////////////////
 	// Attribut(s)

@@ -1,5 +1,7 @@
 package ets.log120.tp1;
 
+import java.awt.geom.Point2D;
+
 /**
  * Spécialisation d'une forme permettant d'afficher une ligne.
  * 
@@ -29,6 +31,11 @@ public class Line extends Shape {
 	public void draw(java.awt.Graphics g) {
 		super.draw(g);
 		g.drawLine(getX(), getY(), x2, y2);
+	}
+	
+	@Override
+	public double getArea() {
+		return Point2D.distance(getX(), getY(), x2, y2);
 	}
 
 	//////////////////////////////////////////////////
