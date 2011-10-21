@@ -159,6 +159,7 @@ public class List<T> {
 				begin = null;
 				rbegin = null;
 			}
+			--elementCount;
 		}
 	}
 
@@ -183,7 +184,6 @@ public class List<T> {
 	/**
 	 * Supprime l'élément situé au début de la liste.
 	 */
-	
 	public void popFront() {
 		if (begin != null) {
 			if(begin.next != null) {
@@ -193,6 +193,7 @@ public class List<T> {
 				begin = null;
 				rbegin = null;
 			}
+			--elementCount;
 		}
 	}
 
