@@ -70,6 +70,25 @@ public final class ApplicationSupport {
       return menu;
    }
    
+   public static JMenu addRadioButtonMenu(final JFrame jFrame, String titleKey, String[] itemKeys) {
+	      JMenuBar menuBar = jFrame.getJMenuBar();
+	      if(menuBar == null) {
+	         menuBar = new JMenuBar();
+	         jFrame.setJMenuBar(menuBar);
+	      }
+
+	      JMenu menu = new JMenu(ApplicationSupport.getResource(titleKey));
+	      ButtonGroup group = new ButtonGroup();
+	      
+	      for(int i=0; i < itemKeys.length; ++i) {
+	    	 JRadioButtonMenuItem radioButton = new JRadioButtonMenuItem(ApplicationSupport.getResource(itemKeys[i]));
+	    	 group.add(radioButton);
+	         menu.add(radioButton);
+	      }
+	      menuBar.add(menu);
+	      return menu;
+	   }
+   
    public static JPanel getStatusArea() {
       return STATUS_AREA;
    }

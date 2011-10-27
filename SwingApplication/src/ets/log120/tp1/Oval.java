@@ -23,9 +23,7 @@ public class Oval extends Shape {
 	 * Construit un oval avec les informations sur sa taille, sa position et sa couleur.
 	 */
 	protected Oval(java.awt.Color color, int sequenceNumber, int x, int y, int hRadius, int vRadius) {
-		super(color, sequenceNumber, x - hRadius, y - vRadius);
-		height = vRadius * 2;
-		width = hRadius * 2;
+		super(color, sequenceNumber, x - hRadius, y - vRadius, hRadius * 2, vRadius * 2);
 	}
 
 	// ////////////////////////////////////////////////
@@ -34,12 +32,12 @@ public class Oval extends Shape {
 	
 	@Override
 	public double getArea() {
-		return Math.PI * width * height;
+		return Math.PI * getWidth() * getHeight();
 	}
 	
 	@Override
 	public double getMaxDistanceBetweenPoints() {
-		return (height > width) ? height : width;
+		return (getHeight() > getWidth()) ? getHeight() : getWidth();
 	}
 	
 	// ////////////////////////////////////////////////
@@ -47,16 +45,9 @@ public class Oval extends Shape {
 	// ////////////////////////////////////////////////
 
 	@Override
-	public void draw(java.awt.Graphics g) {
-		super.draw(g);
-		g.drawOval(getX(), getY(), width, height);
-		g.fillOval(getX(), getY(), width, height);
+	public void draw(java.awt.Graphics g, int x, int y) {
+		super.draw(g, x, y);
+		g.drawOval(x, y, getWidth(), getHeight());
+		g.fillOval(x, y, getWidth(), getHeight());
 	}
-
-	// ////////////////////////////////////////////////
-	// Attribut(s)
-	// ////////////////////////////////////////////////
-
-	private int height;
-	private int width;
 }

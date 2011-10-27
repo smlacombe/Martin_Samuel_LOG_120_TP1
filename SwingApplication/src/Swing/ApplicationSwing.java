@@ -26,16 +26,21 @@ import java.awt.event.KeyEvent;
 import java.io.IOException;
 import java.net.UnknownHostException;
 
+import javax.swing.ButtonGroup;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
+import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JRadioButtonMenuItem;
 import javax.swing.JScrollPane;
 import javax.swing.KeyStroke;
+
 import ets.util.containers.*;
 import ets.log120.*;
 import ets.log120.tp1.ShapeFactory;
+import ets.log120.tp1.functors.*;
 /**
  * <code>ApplicationSwing</code> est un exemple d'une
  * application en Java qui fournit une interface Swing, avec un simple
@@ -97,34 +102,9 @@ public class ApplicationSwing extends JFrame {
 		 * Gère l'approvisionnement en formes à des fins d'affichage.
 		 */
 		protected void dessinerFormes() {
-			try {
-				while (workerActif) {
-					String request = connection.getShapeRequest();
-					System.out.println(request);
-					queue.push(ShapeFactory.makeShape(request));
-					if(queue.size() > NOMBRE_DE_FORMES)
-						queue.pop();
-					
-					repaint();
-					try {
-						Thread.sleep(DELAI_ENTRE_FORMES_MSEC);
-					} catch (InterruptedException e) {
-						e.printStackTrace();
-					}
-	 			}
-			} catch (UnknownHostException e) {
-				e.printStackTrace();
-			} catch (java.net.SocketException e) {
-				JOptionPane.showMessageDialog(null, ApplicationSupport.getResource("app.frame.dialog.network.message.unattendedDisconnection"),
-					ApplicationSupport.getResource("app.frame.dialog.network.title.disconnectionError"), JOptionPane.WARNING_MESSAGE);
-				System.out.println("Connexion diestablished with \"" + serverAddress + ":" + serverPort + "\"");
-				workerActif = false;
-				connectedToServer = false;
-			} catch (IOException e) {
-				System.out.println("Hello world");
-				e.printStackTrace();
-			} catch (Exception e) {
-				e.printStackTrace();
+			if(connectToServer()) {
+				getFormsFromServer();
+				disconnectClient();
 			}
 		}
 	}
@@ -148,8 +128,22 @@ public class ApplicationSwing extends JFrame {
 							
 			Graphics2D g2d = (Graphics2D) g;
 			
-			for (ets.log120.tp1.Shape s : queue)
-				s.draw(g2d);
+			sortShapes();
+			
+			int x = 5;
+			int Y = 5;
+			
+			for (ets.log120.tp1.Shape s : list) {
+				if(x + s.getWidth() > CANEVAS_LARGEUR) {
+					x = 5;
+					Y += s.getHeight() + 5;
+				} else {
+					x += s.getWidth() + 5;
+				}
+				
+				s.draw(g2d, x, Y);
+			}
+	
 						
 			g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
 			RenderingHints.VALUE_ANTIALIAS_ON);		
@@ -204,9 +198,12 @@ public class ApplicationSwing extends JFrame {
 
 	/** Créer le menu "File". */
 	private JMenu creerMenuFichier() {
-		JMenu menu = ApplicationSupport.addMenu(this, MENU_FICHIER_TITRE,new String[] { MENU_FICHIER_QUITTER });
+		JMenu menu = ApplicationSupport.addMenu(this, MENU_FICHIER_TITRE,new String[] {"Obtenir formes", MENU_FICHIER_QUITTER });
 
-		menu.getItem(0).addActionListener(new ActionListener() {
+		getFormsMenuItem = menu.getItem(0);
+		getFormsMenuItem.addActionListener(new DemarrerListener());
+		
+		menu.getItem(1).addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				if (connectedToServer)
@@ -215,15 +212,65 @@ public class ApplicationSwing extends JFrame {
 				System.exit(0);
 			}
 		});
-		menu.getItem(0).setAccelerator(KeyStroke.getKeyStroke(MENU_FICHIER_QUITTER_TOUCHE_RACC, MENU_FICHIER_QUITTER_TOUCHE_MASK));
+		menu.getItem(1).setAccelerator(KeyStroke.getKeyStroke(MENU_FICHIER_QUITTER_TOUCHE_RACC, MENU_FICHIER_QUITTER_TOUCHE_MASK));
 
 		return menu;
+	}
+	
+	private boolean connectToServer() {
+		try {
+			assert !connectedToServer;
+			assert serverAddress != null;
+			assert serverPort != 0;
+			
+			connection = new ets.log120.tp1.NetworkClient(serverAddress, serverPort);
+			connectedToServer = true;
+			rafraichirMenus();
+			
+			System.out.println("Connexion established with \"" + serverAddress + ":" + serverPort + "\"");
+			return true;
+		} catch (UnknownHostException e) {
+			JOptionPane.showMessageDialog(null, "Le nom du serveur « " + serverAddress + " » est impossible à résoudre.",
+					ApplicationSupport.getResource("app.frame.dialog.network.title.dnsError"), JOptionPane.WARNING_MESSAGE);
+		} catch (java.net.ConnectException e) {
+			JOptionPane.showMessageDialog(null, "Le serveur « " + serverAddress + " » sur le port « " + serverPort + " » est introuvable.",
+					ApplicationSupport.getResource("app.frame.dialog.network.title.serverNotFound"), JOptionPane.WARNING_MESSAGE);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return false;
+	}
+	
+	private void getFormsFromServer() {
+		try {
+			list.clear();
+			repaint();
+			for(int i = 0; i < NOMBRE_DE_FORMES; ++i) {
+				String request = connection.getShapeRequest();
+				System.out.println(request);
+				list.pushBack(ShapeFactory.makeShape(request));
+			}
+			repaint();
+		} catch (UnknownHostException e) {
+			e.printStackTrace();
+		} catch (java.net.SocketException e) {
+			JOptionPane.showMessageDialog(null, ApplicationSupport.getResource("app.frame.dialog.network.message.unattendedDisconnection"),
+				ApplicationSupport.getResource("app.frame.dialog.network.title.disconnectionError"), JOptionPane.WARNING_MESSAGE);
+			System.out.println("Connexion diestablished with \"" + serverAddress + ":" + serverPort + "\"");
+			workerActif = false;
+			connectedToServer = false;
+		} catch (IOException e) {
+			System.out.println("Hello world");
+			e.printStackTrace();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 	
 	/** Créer le menu "Network". */
 	private JMenu createNetworkMenu() {
 		JMenu menu = ApplicationSupport.addMenu(this, MENU_NETWORK_TITLE,
-				new String[] {MENU_NETWORK_SERVER_ADDRESS, MENU_NETWORK_CONNECT, MENU_NETWORK_DISCONNECT});
+				new String[] {MENU_NETWORK_SERVER_ADDRESS});
 		
 		serverAddressMenuItem = menu.getItem(0);
 		serverAddressMenuItem.addActionListener(new ActionListener() {
@@ -240,43 +287,72 @@ public class ApplicationSwing extends JFrame {
 			}
 		});
 		
-		connectMenuItem = menu.getItem(1);
-		connectMenuItem.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				try {
-					assert serverAddress != null;
-					assert serverPort != 0;
-					
-					connection = new ets.log120.tp1.NetworkClient(serverAddress, serverPort);
-					connectedToServer = true;
-					rafraichirMenus();
-					
-					System.out.println("Connexion established with \"" + serverAddress + ":" + serverPort + "\"");
-				} catch (UnknownHostException e) {
-					JOptionPane.showMessageDialog(null, "Le nom du serveur « " + serverAddress + " » est impossible à résoudre.",
-							ApplicationSupport.getResource("app.frame.dialog.network.title.dnsError"), JOptionPane.WARNING_MESSAGE);
-				} catch (java.net.ConnectException e) {
-					JOptionPane.showMessageDialog(null, "Le serveur « " + serverAddress + " » sur le port « " + serverPort + " » est introuvable.",
-							ApplicationSupport.getResource("app.frame.dialog.network.title.serverNotFound"), JOptionPane.WARNING_MESSAGE);
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-			}
-		});
-		
-		disconnectMenuItem = menu.getItem(2);
-		disconnectMenuItem.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				disconnectClient();
-			}
-		});
-		
 		return menu;
 	}
 	
-
+	/** Créer le menu "Network". */
+	private JMenu createOrderMenu() {
+		JMenuBar menuBar = getJMenuBar();
+		if(menuBar == null) {
+			menuBar = new JMenuBar();
+			setJMenuBar(menuBar);
+		}
+		
+		JMenu menu = new JMenu(ApplicationSupport.getResource(MENU_VIEW_TITLE));
+		ButtonGroup group = new ButtonGroup();
+      
+		sortBySequenceNumberAscending  = new JRadioButtonMenuItem(ApplicationSupport.getResource(MENU_VIEW_SORT_AS_SEQUENCE_NUMBER_ASCENDING));
+		sortBySequenceNumberDescending = new JRadioButtonMenuItem(ApplicationSupport.getResource(MENU_VIEW_SORT_AS_SEQUENCE_NUMBER_DESCENDING));
+		sortByAreaAscending            = new JRadioButtonMenuItem(ApplicationSupport.getResource(MENU_VIEW_SORT_AS_AREA_ASCENDING));
+		sortByAreaDescending           = new JRadioButtonMenuItem(ApplicationSupport.getResource(MENU_VIEW_SORT_AS_AREA_DESCENDING));
+		sortByShapeTypeAscending       = new JRadioButtonMenuItem(ApplicationSupport.getResource(MENU_VIEW_SORT_AS_SHAPE_TYPE_ASCENDING));
+		sortByShapeTypeDescending      = new JRadioButtonMenuItem(ApplicationSupport.getResource(MENU_VIEW_SORT_AS_SHAPE_TYPE_DESCENDING));
+		sortByDistanceAscending        = new JRadioButtonMenuItem(ApplicationSupport.getResource(MENU_VIEW_SORT_AS_DISTANCE_ASCENDING));
+		sortByDistanceDescending       = new JRadioButtonMenuItem(ApplicationSupport.getResource(MENU_VIEW_SORT_AS_DISTANCE_DESCENDING));
+		
+		group.add(sortBySequenceNumberAscending);
+		group.add(sortBySequenceNumberDescending);
+		group.add(sortByAreaAscending);
+		group.add(sortByAreaDescending);
+		group.add(sortByShapeTypeAscending);
+		group.add(sortByShapeTypeDescending);
+		group.add(sortByDistanceAscending);
+		group.add(sortByDistanceDescending);
+		
+		menu.add(sortBySequenceNumberAscending);
+		menu.add(sortBySequenceNumberDescending);
+		menu.add(sortByAreaAscending);
+		menu.add(sortByAreaDescending);
+		menu.add(sortByShapeTypeAscending);
+		menu.add(sortByShapeTypeDescending);
+		menu.add(sortByDistanceAscending);
+		menu.add(sortByDistanceDescending);
+		
+		menuBar.add(menu);
+		return menu;
+	}
+	
+	private void sortShapes() {
+		if (sortBySequenceNumberAscending.isEnabled()) {
+			list.sort(new SequenceNumberAscending());
+			
+		} else if (sortBySequenceNumberDescending.isEnabled()) {
+			list.sort(new Not(new SequenceNumberAscending()));
+		} else if (sortByAreaAscending.isEnabled()) {
+			list.sort(new AreaAscending());
+		} else if (sortByAreaDescending.isEnabled()) {
+			list.sort(new Not(new AreaAscending()));
+		} else if (sortByShapeTypeAscending.isEnabled()) {
+			list.sort(new ShapeTypeAscending());
+		} else if (sortByShapeTypeDescending.isEnabled()) {
+			list.sort(new Not(new ShapeTypeAscending()));
+		} else if (sortByDistanceAscending.isEnabled()) {
+			list.sort(new MaxDistanceBetweenPointsAscending());
+		} else if (sortByDistanceDescending.isEnabled()) {
+			list.sort(new Not(new MaxDistanceBetweenPointsAscending()));
+		}
+	}
+	
 	/** Créer le menu "Help". */
 	private JMenu creerMenuAide() {
 		JMenu menu = ApplicationSupport.addMenu(this, MENU_AIDE_TITRE,
@@ -325,11 +401,10 @@ public class ApplicationSwing extends JFrame {
 	 * Activer ou désactiver les items du menu selon la sélection. 
 	*/
 	private void rafraichirMenus() {
+		getFormsMenuItem.setEnabled(!connectedToServer && serverAddress != null && serverPort != 0);
 		demarrerMenuItem.setEnabled(connectedToServer && !workerActif);
 		arreterMenuItem.setEnabled(connectedToServer && workerActif);
 		serverAddressMenuItem.setEnabled(!connectedToServer);
-		connectMenuItem.setEnabled(!connectedToServer && serverAddress != null && serverPort != 0);
-		disconnectMenuItem.setEnabled(connectedToServer);
 	}
 	
 	/**
@@ -348,7 +423,6 @@ public class ApplicationSwing extends JFrame {
 		}
 	}
 	
-	
 	/**
 	 *  Lancer l'exécution de l'application. 
 	 */
@@ -359,6 +433,7 @@ public class ApplicationSwing extends JFrame {
 
 		cadre.creerMenuFichier();
 		cadre.creerMenuDessiner();
+		cadre.createOrderMenu();
 		cadre.createNetworkMenu();
 		cadre.creerMenuAide();
 		cadre.loadPreferences();
@@ -392,24 +467,39 @@ public class ApplicationSwing extends JFrame {
 	private static final int MENU_FICHIER_QUITTER_TOUCHE_MASK = ActionEvent.CTRL_MASK;
 	private static final char MENU_FICHIER_QUITTER_TOUCHE_RACC = KeyEvent.VK_Q;
 	private static final String
-			MENU_FICHIER_TITRE = "app.frame.menus.file.title",
-			MENU_FICHIER_QUITTER = "app.frame.menus.file.exit",
-			MENU_DESSIN_TITRE = "app.frame.menus.draw.title",
-			MENU_DESSIN_DEMARRER = "app.frame.menus.draw.start",
-			MENU_DESSIN_ARRETER = "app.frame.menus.draw.stop",
-			MENU_AIDE_TITRE = "app.frame.menus.help.title",
-			MENU_AIDE_PROPOS = "app.frame.menus.help.about",
-			MENU_NETWORK_TITLE = "app.frame.menus.network.title",
-			MENU_NETWORK_SERVER_ADDRESS = "app.frame.menus.network.serverAddress",
-			MENU_NETWORK_CONNECT = "app.frame.menus.network.connect",
-			MENU_NETWORK_DISCONNECT = "app.frame.menus.network.disconnect";
+			MENU_FICHIER_TITRE                            = "app.frame.menus.file.title",
+			MENU_FICHIER_QUITTER                          = "app.frame.menus.file.exit",
+			MENU_DESSIN_TITRE                             = "app.frame.menus.draw.title",
+			MENU_DESSIN_DEMARRER                          = "app.frame.menus.draw.start",
+			MENU_DESSIN_ARRETER                           = "app.frame.menus.draw.stop",
+			MENU_AIDE_TITRE                               = "app.frame.menus.help.title",
+			MENU_AIDE_PROPOS                              = "app.frame.menus.help.about",
+			MENU_NETWORK_TITLE                            = "app.frame.menus.network.title",
+			MENU_NETWORK_SERVER_ADDRESS                   = "app.frame.menus.network.serverAddress",
+			MENU_VIEW_TITLE                               = "app.frame.menus.view.title",
+			MENU_VIEW_SORT_AS_SEQUENCE_NUMBER_ASCENDING   = "app.frame.menus.view.sortBy.sequenceNumberAscending",
+			MENU_VIEW_SORT_AS_SEQUENCE_NUMBER_DESCENDING  = "app.frame.menus.view.sortBy.sequenceNumberDescending",
+			MENU_VIEW_SORT_AS_AREA_ASCENDING              = "app.frame.menus.view.sortBy.areaAscending",
+			MENU_VIEW_SORT_AS_AREA_DESCENDING             = "app.frame.menus.view.sortBy.areaDescending",
+			MENU_VIEW_SORT_AS_SHAPE_TYPE_ASCENDING        = "app.frame.menus.view.sortBy.shapeTypeAscending",
+			MENU_VIEW_SORT_AS_SHAPE_TYPE_DESCENDING       = "app.frame.menus.view.sortBy.shapeTypeDescending",
+			MENU_VIEW_SORT_AS_DISTANCE_ASCENDING          = "app.frame.menus.view.sortBy.distanceAscending",
+			MENU_VIEW_SORT_AS_DISTANCE_DESCENDING         = "app.frame.menus.view.sortBy.distanceDescending";
 	private static final String MESSAGE_DIALOGUE_A_PROPOS = "app.frame.dialog.about";
 	private static final int NOMBRE_DE_FORMES = 10;
 	private static final long serialVersionUID = 1L;
-	private Queue<ets.log120.tp1.Shape> queue = new Queue<ets.log120.tp1.Shape>();
+	private List<ets.log120.tp1.Shape> list = new List<ets.log120.tp1.Shape>();
 	private String serverAddress;
 	private int serverPort;
 	private ets.log120.tp1.NetworkClient connection;
 	private boolean workerActif, connectedToServer;
-	private JMenuItem arreterMenuItem, demarrerMenuItem, disconnectMenuItem, connectMenuItem, serverAddressMenuItem;
+	private JMenuItem getFormsMenuItem, arreterMenuItem, demarrerMenuItem, serverAddressMenuItem;
+	private JRadioButtonMenuItem sortBySequenceNumberAscending;
+	private JRadioButtonMenuItem sortBySequenceNumberDescending;
+	private JRadioButtonMenuItem sortByAreaAscending;
+	private JRadioButtonMenuItem sortByAreaDescending;
+	private JRadioButtonMenuItem sortByShapeTypeAscending;
+	private JRadioButtonMenuItem sortByShapeTypeDescending;
+	private JRadioButtonMenuItem sortByDistanceAscending;
+	private JRadioButtonMenuItem sortByDistanceDescending;
 }

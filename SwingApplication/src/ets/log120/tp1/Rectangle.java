@@ -25,11 +25,7 @@ public class Rectangle extends Shape {
 	 * Construit un rectangle avec les informations sur sa taille, sa position et sa couleur.
 	 */
 	protected Rectangle(java.awt.Color color, int sequenceNumber, int x1, int y1, int x2, int y2) {
-		super(color, sequenceNumber, x1, y1);
-		this.x2 = x2;
-		this.y2 = y2;
-		height = y2 - y1;
-		width = x2 - x1;
+		super(color, sequenceNumber, x1, y1, x2 - x1, y2 - y1);
 	}
 	
 	// ////////////////////////////////////////////////
@@ -38,12 +34,12 @@ public class Rectangle extends Shape {
 	
 	@Override
 	public double getArea() {
-		return width * height;
+		return getWidth() * getHeight();
 	}
 	
 	@Override
 	public double getMaxDistanceBetweenPoints() {
-		return Point2D.distance(getX(), getY(), x2, y2);
+		return Point2D.distance(getX(), getY(), getX() + getWidth(), getY() + getHeight());
 	}
 
 	// ////////////////////////////////////////////////
@@ -51,18 +47,9 @@ public class Rectangle extends Shape {
 	// ////////////////////////////////////////////////
 
 	@Override
-	public void draw(java.awt.Graphics g) {
-		super.draw(g);
-		g.drawRect(getX(), getY(), width, height);
-		g.fillRect(getX(), getY(), width, height);
+	public void draw(java.awt.Graphics g, int x, int y) {
+		super.draw(g, x, y);
+		g.drawRect(x, y, getWidth(), getHeight());
+		g.fillRect(x, y, getWidth(), getHeight());
 	}
-
-	// ////////////////////////////////////////////////
-	// Attribut(s)
-	// ////////////////////////////////////////////////
-
-	private int x2;
-	private int y2;
-	private int height;
-	private int width;
 }

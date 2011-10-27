@@ -18,7 +18,14 @@ public class Line extends Shape {
 	 * Construit une ligne avec les informations sur sa taille et sa position.
 	 */
 	public Line(int sequenceNumber, int x1, int y1, int x2, int y2) {
-		super(java.awt.Color.GREEN, sequenceNumber, x1, y1);
+		super(java.awt.Color.GREEN, sequenceNumber,
+				Math.min(x1, x2),   // x
+				Math.min(y1, y2),   // y
+				Math.abs(x2 - x1),  // width
+				Math.abs(y2 - y1)); // height
+		
+		this.x1 = x1;
+		this.y1 = y1;
 		this.x2 = x2;
 		this.y2 = y2;
 	}
@@ -29,12 +36,12 @@ public class Line extends Shape {
 	
 	@Override
 	public double getArea() {
-		return Point2D.distance(getX(), getY(), x2, y2);
+		return Point2D.distance(x1, y1, x2, y2);
 	}
 	
 	@Override
 	public double getMaxDistanceBetweenPoints() {
-		return Point2D.distance(getX(), getY(), x2, y2);
+		return Point2D.distance(x1, y1, x2, y2);
 	}
 	
 	//////////////////////////////////////////////////
@@ -42,15 +49,32 @@ public class Line extends Shape {
 	//////////////////////////////////////////////////
 	
 	@Override
-	public void draw(java.awt.Graphics g) {
-		super.draw(g);
-		g.drawLine(getX(), getY(), x2, y2);
+	public void draw(java.awt.Graphics g, int x, int y) {
+		super.draw(g, x, y);
+		System.out.println(x + " " + y + " " + getWidth() + " " + getHeight());
+		
+		if(x1 < x2) {
+			if(y1 <= y2)
+				g.drawLine(x, y, x + getWidth(), y + getHeight());
+			else
+				g.drawLine(x, y, x + getWidth(), y - getHeight());
+		} else if(x1 > x2) {
+			if(y1 <= y2)
+				g.drawLine(x, y, x - getWidth(), y + getHeight());
+			else
+				g.drawLine(x, y, x - getWidth(), y - getHeight());
+		}
+		
+		
+		//g.drawLine(x, y, x + getWidth(), y + getHeight());
 	}
-
+	
 	//////////////////////////////////////////////////
 	// Attribut(s)
 	//////////////////////////////////////////////////
 	
-	private int x2;
-	private int y2;
+	int x1;
+	int y1;
+	int x2;
+	int y2;
 }

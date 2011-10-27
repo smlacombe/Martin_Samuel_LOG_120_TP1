@@ -16,11 +16,13 @@ public abstract class Shape {
 	 * Construit une forme avec une couleur, un numéro d'identification et ses
 	 * coordonnées.
 	 */
-	protected Shape(java.awt.Color color, int sequenceNumber, int x, int y) {
+	protected Shape(java.awt.Color color, int sequenceNumber, int x, int y, int width, int height) {
 		this.color = color;
 		this.sequenceNumber = sequenceNumber;
 		this.x = x;
 		this.y = y;
+		this.height = height;
+		this.width = width;
 		logger.logID(sequenceNumber);
 	}
 
@@ -48,6 +50,20 @@ public abstract class Shape {
 	protected int getY() {
 		return y;
 	}
+	
+	/**
+	 * Retourne la hauteur de la forme.
+	 */
+	public int getHeight() {
+		return height;
+	}
+	
+	/**
+	 * Retourne la largeur de la forme.
+	 */
+	public int getWidth() {
+		return width;
+	}
 
 	// ///////////////////////////////////////////////
 	// Méthode(s)
@@ -57,12 +73,16 @@ public abstract class Shape {
 	 * Dessine la forme sur l'environnement graphique reçu en paramètre.
 	 */
 	public void draw(java.awt.Graphics g) {
+		draw(g, x, y);
+	}
+	
+	public void draw(java.awt.Graphics g, int x, int y) {
 		g.setColor(color);
 	}
 	
 	/**
 	 * Retourne l'aire de la forme.
-	 */	
+	 */
 	public abstract double getArea();
 	
 	/**
@@ -79,4 +99,6 @@ public abstract class Shape {
 	private int sequenceNumber;
 	private int x;
 	private int y;
+	private int height;
+	private int width;
 }
