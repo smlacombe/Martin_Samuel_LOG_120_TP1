@@ -230,6 +230,7 @@ public class ApplicationSwing extends JFrame {
 			rafraichirMenus();
 			
 			System.out.println("Connexion established with \"" + serverAddress + ":" + serverPort + "\"");
+		System.out.println(sortBySequenceNumberAscending.isSelected() ? "oui" : "non" );
 			return true;
 		} catch (UnknownHostException e) {
 			JOptionPane.showMessageDialog(null, "Le nom du serveur « " + serverAddress + " » est impossible à résoudre.",
@@ -303,7 +304,7 @@ public class ApplicationSwing extends JFrame {
 		JMenu menu = new JMenu(ApplicationSupport.getResource(MENU_VIEW_TITLE));
 		ButtonGroup group = new ButtonGroup();
       
-		sortBySequenceNumberAscending  = new JRadioButtonMenuItem(ApplicationSupport.getResource(MENU_VIEW_SORT_AS_SEQUENCE_NUMBER_ASCENDING));
+		sortBySequenceNumberAscending  = new JRadioButtonMenuItem(ApplicationSupport.getResource(MENU_VIEW_SORT_AS_SEQUENCE_NUMBER_ASCENDING), true);
 		sortBySequenceNumberDescending = new JRadioButtonMenuItem(ApplicationSupport.getResource(MENU_VIEW_SORT_AS_SEQUENCE_NUMBER_DESCENDING));
 		sortByAreaAscending            = new JRadioButtonMenuItem(ApplicationSupport.getResource(MENU_VIEW_SORT_AS_AREA_ASCENDING));
 		sortByAreaDescending           = new JRadioButtonMenuItem(ApplicationSupport.getResource(MENU_VIEW_SORT_AS_AREA_DESCENDING));
@@ -335,21 +336,21 @@ public class ApplicationSwing extends JFrame {
 	}
 	
 	private void sortShapes() {
-		if (sortBySequenceNumberAscending.isEnabled()) {
+		if (sortBySequenceNumberAscending.isSelected()) {
 			list.sort(new SequenceNumberAscending());
-		} else if (sortBySequenceNumberDescending.isEnabled()) {
+		} else if (sortBySequenceNumberDescending.isSelected()) {
 			list.sort(new Not(new SequenceNumberAscending()));
-		} else if (sortByAreaAscending.isEnabled()) {
+		} else if (sortByAreaAscending.isSelected()) {
 			list.sort(new AreaAscending());
-		} else if (sortByAreaDescending.isEnabled()) {
+		} else if (sortByAreaDescending.isSelected()) {
 			list.sort(new Not(new AreaAscending()));
-		} else if (sortByShapeTypeAscending.isEnabled()) {
+		} else if (sortByShapeTypeAscending.isSelected()) {
 			list.sort(new ShapeTypeAscending());
-		} else if (sortByShapeTypeDescending.isEnabled()) {
+		} else if (sortByShapeTypeDescending.isSelected()) {
 			list.sort(new Not(new ShapeTypeAscending()));
-		} else if (sortByDistanceAscending.isEnabled()) {
+		} else if (sortByDistanceAscending.isSelected()) {
 			list.sort(new MaxDistanceBetweenPointsAscending());
-		} else if (sortByDistanceDescending.isEnabled()) {
+		} else if (sortByDistanceDescending.isSelected()) {
 			list.sort(new Not(new MaxDistanceBetweenPointsAscending()));
 		}
 	}
