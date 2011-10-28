@@ -49,23 +49,21 @@ public class Line extends Shape {
 	//////////////////////////////////////////////////
 	
 	@Override
-	public void draw(java.awt.Graphics g, int x, int y) {
-		super.draw(g, x, y);
-		
-		if(x1 < x2) {
+	public void doDraw(java.awt.Graphics g, int x, int y) {
+		if(x1 <= x2) {
 			if(y1 <= y2)
 				g.drawLine(x, y, x + getWidth(), y + getHeight());
 			else
-				g.drawLine(x, y, x + getWidth(), y - getHeight());
-		} else if(x1 > x2) {
+				g.drawLine(x, y + getHeight(), x + getWidth(), y);
+		} else {
 			if(y1 <= y2)
-				g.drawLine(x, y, x - getWidth(), y + getHeight());
+				g.drawLine(x, y + getHeight(), x + getWidth(), y);
 			else
-				g.drawLine(x, y, x - getWidth(), y - getHeight());
+				g.drawLine(x, y, x + getWidth(), y + getHeight());
 		}
 		
 		
-		//g.drawLine(x, y, x + getWidth(), y + getHeight());
+	//	g.drawLine(x1 - x, y1 - y, x2 - x, y2 - y);
 	}
 	
 	//////////////////////////////////////////////////

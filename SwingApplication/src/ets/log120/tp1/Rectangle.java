@@ -47,8 +47,7 @@ public class Rectangle extends Shape {
 	// ////////////////////////////////////////////////
 
 	@Override
-	public void draw(java.awt.Graphics g, int x, int y) {
-		super.draw(g, x, y);
+	public void doDraw(java.awt.Graphics g, int x, int y) {
 		g.drawRect(x, y, getWidth(), getHeight());
 		g.fillRect(x, y, getWidth(), getHeight());
 	}

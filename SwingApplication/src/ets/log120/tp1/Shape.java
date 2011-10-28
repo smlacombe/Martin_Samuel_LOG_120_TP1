@@ -78,7 +78,10 @@ public abstract class Shape {
 	
 	public void draw(java.awt.Graphics g, int x, int y) {
 		g.setColor(color);
+		doDraw(g, x, y);
 	}
+	
+	public abstract void doDraw(java.awt.Graphics g, int x, int y);
 	
 	/**
 	 * Retourne l'aire de la forme.

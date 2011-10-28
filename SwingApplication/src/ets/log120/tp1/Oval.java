@@ -45,8 +45,7 @@ public class Oval extends Shape {
 	// ////////////////////////////////////////////////
 
 	@Override
-	public void draw(java.awt.Graphics g, int x, int y) {
-		super.draw(g, x, y);
+	public void doDraw(java.awt.Graphics g, int x, int y) {
 		g.drawOval(x, y, getWidth(), getHeight());
 		g.fillOval(x, y, getWidth(), getHeight());
 	}

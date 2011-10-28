@@ -130,22 +130,22 @@ public class ApplicationSwing extends JFrame {
 			
 			sortShapes();
 			
-			int x = 5;
-			int Y = 5;
+			final int DISTANCE_BETWEEN_SHAPES = 5;
+			
+			int x = DISTANCE_BETWEEN_SHAPES;
+			int Y = DISTANCE_BETWEEN_SHAPES;
+			int maxHeight = 0;
 			
 			for (ets.log120.tp1.Shape s : list) {
-				s.draw(g2d, x, Y);
-				
-				//ajuste la position de la prochaine forme
 				if(x + s.getWidth() > CANEVAS_LARGEUR) {
-					x = 5;
-					Y += s.getHeight() + 5;
-				} else {
-					x += s.getWidth() + 5;
+					x = DISTANCE_BETWEEN_SHAPES;
+					Y += maxHeight + DISTANCE_BETWEEN_SHAPES;
+					maxHeight = 0;
 				}
-								
+				s.draw(g2d, x, Y);
+				x += s.getWidth() + DISTANCE_BETWEEN_SHAPES;
+				maxHeight = Math.max(maxHeight, s.getHeight());			
 			}
-	
 						
 			g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
 			RenderingHints.VALUE_ANTIALIAS_ON);		
