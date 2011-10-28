@@ -313,6 +313,8 @@ public class ApplicationSwing extends JFrame {
 		menu.add(sortByDistanceDescending       = createRadioButtonMenuItem(group, MENU_VIEW_SORT_AS_DISTANCE_DESCENDING));
 		menu.add(sortByHeightAscending          = createRadioButtonMenuItem(group, MENU_VIEW_SORT_AS_HEIGHT_ASCENDING));
 		menu.add(sortByHeightDescending         = createRadioButtonMenuItem(group, MENU_VIEW_SORT_AS_HEIGHT_DESCENDING));
+		menu.add(sortByWidthAscending           = createRadioButtonMenuItem(group, MENU_VIEW_SORT_AS_WIDTH_ASCENDING));
+		menu.add(sortByWidthDescending          = createRadioButtonMenuItem(group, MENU_VIEW_SORT_AS_WIDTH_DESCENDING));
 		
 		sortBySequenceNumberAscending.setSelected(true);
 		
@@ -354,6 +356,10 @@ public class ApplicationSwing extends JFrame {
 			list.sort(new HeightAscending());
 		} else if (sortByHeightDescending.isSelected()) {
 			list.sort(new Not(new HeightAscending()));
+		} else if (sortByWidthAscending.isSelected()) {
+			list.sort(new WidthAscending());
+		} else if (sortByWidthDescending.isSelected()) {
+			list.sort(new Not(new WidthAscending()));
 		}
 	}
 	
@@ -490,8 +496,10 @@ public class ApplicationSwing extends JFrame {
 			MENU_VIEW_SORT_AS_DISTANCE_ASCENDING          = "app.frame.menus.view.sortBy.distanceAscending",
 			MENU_VIEW_SORT_AS_DISTANCE_DESCENDING         = "app.frame.menus.view.sortBy.distanceDescending",
 			MENU_VIEW_SORT_AS_HEIGHT_ASCENDING            = "app.frame.menus.view.sortBy.heightAscending",
-			MENU_VIEW_SORT_AS_HEIGHT_DESCENDING           = "app.frame.menus.view.sortBy.heightDescending";
-	private static final String MESSAGE_DIALOGUE_A_PROPOS = "app.frame.dialog.about";
+			MENU_VIEW_SORT_AS_HEIGHT_DESCENDING           = "app.frame.menus.view.sortBy.heightDescending",
+			MENU_VIEW_SORT_AS_WIDTH_ASCENDING             = "app.frame.menus.view.sortBy.widthAscending",
+			MENU_VIEW_SORT_AS_WIDTH_DESCENDING            = "app.frame.menus.view.sortBy.widthDescending",
+			MESSAGE_DIALOGUE_A_PROPOS                     = "app.frame.dialog.about";
 	private static final int NOMBRE_DE_FORMES = 10;
 	private static final long serialVersionUID = 1L;
 	private List<ets.log120.tp1.Shape> list = new List<ets.log120.tp1.Shape>();
@@ -510,4 +518,6 @@ public class ApplicationSwing extends JFrame {
 	private JRadioButtonMenuItem sortByDistanceDescending;
 	private JRadioButtonMenuItem sortByHeightAscending;
 	private JRadioButtonMenuItem sortByHeightDescending;
+	private JRadioButtonMenuItem sortByWidthAscending;
+	private JRadioButtonMenuItem sortByWidthDescending;
 }

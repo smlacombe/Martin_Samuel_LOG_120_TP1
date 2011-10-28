@@ -11,6 +11,7 @@ import ets.log120.tp1.functors.MaxDistanceBetweenPointsAscending;
 import ets.log120.tp1.functors.Not;
 import ets.log120.tp1.functors.SequenceNumberAscending;
 import ets.log120.tp1.functors.ShapeTypeAscending;
+import ets.log120.tp1.functors.WidthAscending;
 
 public class FunctorsTest {
 
@@ -24,9 +25,9 @@ public class FunctorsTest {
 	@Before
 	public void before() {
 		l = new ets.util.containers.List<Shape>();
-		l.pushBack(square    = ShapeFactory.makeShape("200 <CARRE> 100 100 200 200 </CARRE>"));
+		l.pushBack(square    = ShapeFactory.makeShape("200 <CARRE> 100 100 205 200 </CARRE>"));
 		l.pushBack(rectangle = ShapeFactory.makeShape("300 <RECTANGLE> 100 100 150 205 </RECTANGLE>"));
-		l.pushBack(line      = ShapeFactory.makeShape("250 <LIGNE> 10 10 10 100 </LIGNE>"));
+		l.pushBack(line      = ShapeFactory.makeShape("250 <LIGNE> 10 10 15 100 </LIGNE>"));
 		l.pushBack(circle    = ShapeFactory.makeShape("100 <CERCLE> 250 250 200 </CERCLE>"));
 		l.pushBack(oval      = ShapeFactory.makeShape("500 <OVALE> 100 100 50 75 </OVALE>"));
 	}
@@ -191,9 +192,6 @@ public class FunctorsTest {
 		assertEquals(i.next(), line);
 		assertEquals(i.next(), circle);
 		assertEquals(i.next(), oval);
-		
-		for(Shape s : l)
-			System.out.print(s.getHeight() + " ");
 
 		l.sort(new HeightAscending());
 
@@ -221,6 +219,47 @@ public class FunctorsTest {
 		assertEquals(i.next(), oval);
 		assertEquals(i.next(), rectangle);
 		assertEquals(i.next(), square);
+		assertEquals(i.next(), line);
+	}
+	
+	@Test
+	public void testWidthAscending() {
+		java.util.Iterator<Shape> i = l.iterator();
+		assertEquals(i.next(), square);
+		assertEquals(i.next(), rectangle);
+		assertEquals(i.next(), line);
+		assertEquals(i.next(), circle);
+		assertEquals(i.next(), oval);
+
+		l.sort(new WidthAscending());
+
+		i = l.iterator();
+		assertEquals(i.next(), line);
+		assertEquals(i.next(), rectangle);
+		assertEquals(i.next(), oval);
+		assertEquals(i.next(), square);
+		assertEquals(i.next(), circle);
+	}
+	
+	@Test
+	public void testWidthDescending() {
+		java.util.Iterator<Shape> i = l.iterator();
+		assertEquals(i.next(), square);
+		assertEquals(i.next(), rectangle);
+		assertEquals(i.next(), line);
+		assertEquals(i.next(), circle);
+		assertEquals(i.next(), oval);
+		
+		for(Shape s : l)
+			System.out.print(s.getWidth() + " ");
+
+		l.sort(new Not(new WidthAscending()));
+
+		i = l.iterator();
+		assertEquals(i.next(), circle);
+		assertEquals(i.next(), square);
+		assertEquals(i.next(), oval);
+		assertEquals(i.next(), rectangle);
 		assertEquals(i.next(), line);
 	}
 }
