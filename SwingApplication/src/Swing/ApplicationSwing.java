@@ -134,14 +134,16 @@ public class ApplicationSwing extends JFrame {
 			int Y = 5;
 			
 			for (ets.log120.tp1.Shape s : list) {
+				s.draw(g2d, x, Y);
+				
+				//ajuste la position de la prochaine forme
 				if(x + s.getWidth() > CANEVAS_LARGEUR) {
 					x = 5;
 					Y += s.getHeight() + 5;
 				} else {
 					x += s.getWidth() + 5;
 				}
-				
-				s.draw(g2d, x, Y);
+								
 			}
 	
 						
@@ -335,7 +337,6 @@ public class ApplicationSwing extends JFrame {
 	private void sortShapes() {
 		if (sortBySequenceNumberAscending.isEnabled()) {
 			list.sort(new SequenceNumberAscending());
-			
 		} else if (sortBySequenceNumberDescending.isEnabled()) {
 			list.sort(new Not(new SequenceNumberAscending()));
 		} else if (sortByAreaAscending.isEnabled()) {
