@@ -230,7 +230,6 @@ public class ApplicationSwing extends JFrame {
 			rafraichirMenus();
 			
 			System.out.println("Connexion established with \"" + serverAddress + ":" + serverPort + "\"");
-		System.out.println(sortBySequenceNumberAscending.isSelected() ? "oui" : "non" );
 			return true;
 		} catch (UnknownHostException e) {
 			JOptionPane.showMessageDialog(null, "Le nom du serveur « " + serverAddress + " » est impossible à résoudre.",
