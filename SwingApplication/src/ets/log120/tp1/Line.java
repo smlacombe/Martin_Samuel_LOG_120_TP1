@@ -51,7 +51,6 @@ public class Line extends Shape {
 	@Override
 	public void draw(java.awt.Graphics g, int x, int y) {
 		super.draw(g, x, y);
-		System.out.println(x + " " + y + " " + getWidth() + " " + getHeight());
 		
 		if(x1 < x2) {
 			if(y1 <= y2)

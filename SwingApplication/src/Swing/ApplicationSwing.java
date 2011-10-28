@@ -302,36 +302,33 @@ public class ApplicationSwing extends JFrame {
 		
 		JMenu menu = new JMenu(ApplicationSupport.getResource(MENU_VIEW_TITLE));
 		ButtonGroup group = new ButtonGroup();
-      
-		sortBySequenceNumberAscending  = new JRadioButtonMenuItem(ApplicationSupport.getResource(MENU_VIEW_SORT_AS_SEQUENCE_NUMBER_ASCENDING), true);
-		sortBySequenceNumberDescending = new JRadioButtonMenuItem(ApplicationSupport.getResource(MENU_VIEW_SORT_AS_SEQUENCE_NUMBER_DESCENDING));
-		sortByAreaAscending            = new JRadioButtonMenuItem(ApplicationSupport.getResource(MENU_VIEW_SORT_AS_AREA_ASCENDING));
-		sortByAreaDescending           = new JRadioButtonMenuItem(ApplicationSupport.getResource(MENU_VIEW_SORT_AS_AREA_DESCENDING));
-		sortByShapeTypeAscending       = new JRadioButtonMenuItem(ApplicationSupport.getResource(MENU_VIEW_SORT_AS_SHAPE_TYPE_ASCENDING));
-		sortByShapeTypeDescending      = new JRadioButtonMenuItem(ApplicationSupport.getResource(MENU_VIEW_SORT_AS_SHAPE_TYPE_DESCENDING));
-		sortByDistanceAscending        = new JRadioButtonMenuItem(ApplicationSupport.getResource(MENU_VIEW_SORT_AS_DISTANCE_ASCENDING));
-		sortByDistanceDescending       = new JRadioButtonMenuItem(ApplicationSupport.getResource(MENU_VIEW_SORT_AS_DISTANCE_DESCENDING));
 		
-		group.add(sortBySequenceNumberAscending);
-		group.add(sortBySequenceNumberDescending);
-		group.add(sortByAreaAscending);
-		group.add(sortByAreaDescending);
-		group.add(sortByShapeTypeAscending);
-		group.add(sortByShapeTypeDescending);
-		group.add(sortByDistanceAscending);
-		group.add(sortByDistanceDescending);
+		menu.add(sortBySequenceNumberAscending  = createRadioButtonMenuItem(group, MENU_VIEW_SORT_AS_SEQUENCE_NUMBER_ASCENDING));
+		menu.add(sortBySequenceNumberDescending = createRadioButtonMenuItem(group, MENU_VIEW_SORT_AS_SEQUENCE_NUMBER_DESCENDING));
+		menu.add(sortByAreaAscending            = createRadioButtonMenuItem(group, MENU_VIEW_SORT_AS_AREA_ASCENDING));
+		menu.add(sortByAreaDescending           = createRadioButtonMenuItem(group, MENU_VIEW_SORT_AS_AREA_DESCENDING));
+		menu.add(sortByShapeTypeAscending       = createRadioButtonMenuItem(group, MENU_VIEW_SORT_AS_SHAPE_TYPE_ASCENDING));
+		menu.add(sortByShapeTypeDescending      = createRadioButtonMenuItem(group, MENU_VIEW_SORT_AS_SHAPE_TYPE_DESCENDING));
+		menu.add(sortByDistanceAscending        = createRadioButtonMenuItem(group, MENU_VIEW_SORT_AS_DISTANCE_ASCENDING));
+		menu.add(sortByDistanceDescending       = createRadioButtonMenuItem(group, MENU_VIEW_SORT_AS_DISTANCE_DESCENDING));
 		
-		menu.add(sortBySequenceNumberAscending);
-		menu.add(sortBySequenceNumberDescending);
-		menu.add(sortByAreaAscending);
-		menu.add(sortByAreaDescending);
-		menu.add(sortByShapeTypeAscending);
-		menu.add(sortByShapeTypeDescending);
-		menu.add(sortByDistanceAscending);
-		menu.add(sortByDistanceDescending);
+		sortBySequenceNumberAscending.setSelected(true);
 		
 		menuBar.add(menu);
 		return menu;
+	}
+	
+	private JRadioButtonMenuItem createRadioButtonMenuItem(ButtonGroup group, String title) {
+		JRadioButtonMenuItem radioButton = new JRadioButtonMenuItem(ApplicationSupport.getResource(title));
+		group.add(radioButton);
+		radioButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				repaint();
+			}
+		});
+		
+		return radioButton;
 	}
 	
 	private void sortShapes() {
