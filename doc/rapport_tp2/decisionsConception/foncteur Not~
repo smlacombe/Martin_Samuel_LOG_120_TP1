@@ -1,0 +1,15 @@
+L'utilisation du foncteur Not pour inverser l'ordre des formes.
+
+Dans l'énoncé du travail pratique 2, nous devions trier des formes selon un ordre quelquonque de façon croissante et décroissante. Nous avions envisager de créer des foncteurs pour chaque critère pour l'ordre décroissant. Mais en prenant du recul, nous nous sommes dit que nous pourrions créer un foncteur générique appelé "Not" qui viendrait inverser le résultat de la comparaison du foncteur ascendant. 
+
+
+Les avantages sont encore une fois une réduction de code et une augmentation de la lisibilité du code. 
+
+
+ Expliquez le problème rencontré
+    Décrivez la solution retenue
+    Discutez des alternatives considérées
+    Discutez des améliorations possibles (par exemple, si vous aviez le droit d'utiliser Vector, etc).
+
+
+La problématique était de pouvoir afficher des formes à l'écran selon un ordre spécifique. La première chose qui nous vient à l'exprit pour la conception est de créer une fonction de tri pour chaque critère de tri demandé. Toutefois, nous nous sommes vite rendu compte que ceci occasionnait de la répétition de code. En effet, toutes les fonctions de tri utilise le même algorithme. La seule chose qui diffère est le critère de comparaison. Nous nous sommes donc raliés à l'utilisation de foncteurs. Un foncteur permet d'encapsuler le manière de comparer les formes entre eux. Après la création du foncteur, celui-ci peut être passé en paramètre à la fonction de tri qui va l'utiliser pour déterminer dans quelle ordre les formes doivent être placées. Une des sous-décisions que nous avons prises étaient de créer une classe pour chaque foncteurs. En faisant cela, nous pouvons constatez que ça permet d'améliorer grandement la lisibilité du code. Nous aurions aussi pu utiliser des lambdas. Cette technique aurait consisté à écrire le critère de comparaison directement en paramètre dans la fonction de tri. Par contre, ceci aurait au contraire de l'utilisation de classes, diminuer la lisibilité du code de l'application.
