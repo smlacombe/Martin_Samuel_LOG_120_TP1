@@ -1,0 +1,7 @@
+Le diagramme de classe est assez similaire à celui de notre tp1. Il y a quand même quelques différences. L'arborescence de la classe shape reste la même, mais nous avons modifié l'interface de ces classes. La hauteur et la largeur des formes sont maintenant exposées avec des accesseurs. Nous avons implémenté des méthodes retournant l'air et la distance maximum entre deux points. Cette dernière décision et d'ailleurs expliquée dans la section décisions de conception.
+
+Les méthodes relatives aux dessins ont changé. Il faut noter qu'une surcharge de la méthode draw est apparue dans le tp2 pour offrir la possibilité de dessiner selon une position déterminée par l'ordre de la forme. Désormais, c'est la méthode doDraw qui fournit aux classes dérivées de shape la possibilité de dessiner la forme appropriée au type de celle-ci.
+
+Le conteneur "Queue" que nous utilisions est remplacé par une liste doublement chainée nommée "List". Elle agrège des "Shapes" et est utilisée dans ApplicationSwing pour l'affichage.
+
+Il faut aussi noter l'ajout de différents foncteurs en tant que classes implémentant l'interface comparator. L'ajout de ces éléments en tant que classe est dû principalement à une obligation de Java d'avoir du code uniquement dans des classes.
