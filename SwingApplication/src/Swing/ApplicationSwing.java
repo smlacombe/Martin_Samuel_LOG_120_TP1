@@ -172,32 +172,6 @@ public class ApplicationSwing extends JFrame {
 		});
 	}
 
-	/** Créer le menu "Draw". */
-	private JMenu creerMenuDessiner() {
-		JMenu menu = ApplicationSupport.addMenu(this, MENU_DESSIN_TITRE,
-				new String[] { MENU_DESSIN_DEMARRER, MENU_DESSIN_ARRETER });
-
-		demarrerMenuItem = menu.getItem(0);
-		demarrerMenuItem.addActionListener(new DemarrerListener());
-		demarrerMenuItem.setAccelerator(KeyStroke.getKeyStroke(
-				MENU_DESSIN_DEMARRER_TOUCHE_RACC,
-				MENU_DESSIN_DEMARRER_TOUCHE_MASK));
-
-		arreterMenuItem = menu.getItem(1);
-		arreterMenuItem.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				workerActif = false;
-				rafraichirMenus();
-			}
-		});
-		arreterMenuItem.setAccelerator(KeyStroke.getKeyStroke(
-				MENU_DESSIN_ARRETER_TOUCHE_RACC,
-				MENU_DESSIN_ARRETER_TOUCHE_MASK));
-
-		return menu;
-	}
-
 	/** Créer le menu "File". */
 	private JMenu creerMenuFichier() {
 		JMenu menu = ApplicationSupport.addMenu(this, MENU_FICHIER_TITRE,new String[] {"Obtenir formes", MENU_FICHIER_QUITTER });
@@ -412,8 +386,6 @@ public class ApplicationSwing extends JFrame {
 	*/
 	private void rafraichirMenus() {
 		getFormsMenuItem.setEnabled(!connectedToServer && serverAddress != null && serverPort != 0);
-		demarrerMenuItem.setEnabled(connectedToServer && !workerActif);
-		arreterMenuItem.setEnabled(connectedToServer && workerActif);
 		serverAddressMenuItem.setEnabled(!connectedToServer);
 	}
 	
@@ -442,7 +414,6 @@ public class ApplicationSwing extends JFrame {
 		ApplicationSwing cadre = new ApplicationSwing();
 
 		cadre.creerMenuFichier();
-		cadre.creerMenuDessiner();
 		cadre.createOrderMenu();
 		cadre.createNetworkMenu();
 		cadre.creerMenuAide();
@@ -507,7 +478,7 @@ public class ApplicationSwing extends JFrame {
 	private int serverPort;
 	private ets.log120.tp1.NetworkClient connection;
 	private boolean workerActif, connectedToServer;
-	private JMenuItem getFormsMenuItem, arreterMenuItem, demarrerMenuItem, serverAddressMenuItem;
+	private JMenuItem getFormsMenuItem, serverAddressMenuItem;
 	private JRadioButtonMenuItem sortBySequenceNumberAscending;
 	private JRadioButtonMenuItem sortBySequenceNumberDescending;
 	private JRadioButtonMenuItem sortByAreaAscending;
