@@ -236,7 +236,6 @@ public class ApplicationSwing extends JFrame {
 			workerActif = false;
 			connectedToServer = false;
 		} catch (IOException e) {
-			System.out.println("Hello world");
 			e.printStackTrace();
 		} catch (Exception e) {
 			e.printStackTrace();
