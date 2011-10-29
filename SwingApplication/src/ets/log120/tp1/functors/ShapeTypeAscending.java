@@ -6,6 +6,11 @@ import ets.log120.tp1.Rectangle;
 import ets.log120.tp1.Shape;
 import ets.log120.tp1.Square;
 
+/**
+ * Foncteur indiquant si le type de forme est supérieur à une autre forme
+ * 
+ * @author Samuel Milette-Lacombe
+ */
 public class ShapeTypeAscending implements java.util.Comparator<Shape> {
 	@Override
 	public int compare(Shape left, Shape right) {
