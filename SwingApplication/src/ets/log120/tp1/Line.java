@@ -61,9 +61,6 @@ public class Line extends Shape {
 			else
 				g.drawLine(x, y, x + getWidth(), y + getHeight());
 		}
-		
-		
-	//	g.drawLine(x1 - x, y1 - y, x2 - x, y2 - y);
 	}
 	
 	//////////////////////////////////////////////////

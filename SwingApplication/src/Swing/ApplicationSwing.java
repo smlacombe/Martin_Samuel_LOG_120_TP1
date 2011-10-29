@@ -144,7 +144,7 @@ public class ApplicationSwing extends JFrame {
 				}
 				s.draw(g2d, x, Y);
 				x += s.getWidth() + DISTANCE_BETWEEN_SHAPES;
-				maxHeight = Math.max(maxHeight, s.getHeight());			
+				maxHeight = Math.max(maxHeight, s.getHeight());
 			}
 						
 			g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING,

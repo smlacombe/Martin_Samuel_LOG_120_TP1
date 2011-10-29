@@ -13,13 +13,6 @@ import java.util.NoSuchElementException;
 public class List<T> implements Iterable<T> {
 
 	// ////////////////////////////////////////////////
-	// Constructeur(s)
-	// ////////////////////////////////////////////////
-
-	public List() {
-	}
-
-	// ////////////////////////////////////////////////
 	// Accesseur(s)
 	// ////////////////////////////////////////////////
 
@@ -215,6 +208,9 @@ public class List<T> implements Iterable<T> {
 	// Classe(s) interne(s)
 	// ////////////////////////////////////////////////
 
+	/**
+	 * Structure représentant un maillon de la liste chainée.
+	 */
 	private class Node<D> {
 		public Node<D> prior;
 		public Node<D> next;

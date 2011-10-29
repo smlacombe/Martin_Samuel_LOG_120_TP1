@@ -76,12 +76,18 @@ public abstract class Shape {
 		draw(g, x, y);
 	}
 	
+	/**
+	 * Dessine la forme sur l'environnement graphique reçu en paramètre à la position demandée à l'aide de la méthode doDraw().
+	 */
 	public void draw(java.awt.Graphics g, int x, int y) {
 		g.setColor(color);
 		doDraw(g, x, y);
 	}
 	
-	public abstract void doDraw(java.awt.Graphics g, int x, int y);
+	/**
+	 * Dessine la forme sur l'environnement graphique reçu en paramètre à la position demandée.
+	 */
+	protected abstract void doDraw(java.awt.Graphics g, int x, int y);
 	
 	/**
 	 * Retourne l'aire de la forme.
@@ -89,7 +95,7 @@ public abstract class Shape {
 	public abstract double getArea();
 	
 	/**
-	 * Retourne la plus grande entre deux points de la forme.
+	 * Retourne la plus grande distance entre deux points de la forme.
 	 */
 	public abstract double getMaxDistanceBetweenPoints();
 
