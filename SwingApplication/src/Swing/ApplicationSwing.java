@@ -162,7 +162,7 @@ public class ApplicationSwing extends JFrame {
 
 	/** Créer le menu "File". */
 	private JMenu creerMenuFichier() {
-		JMenu menu = ApplicationSupport.addMenu(this, MENU_FICHIER_TITRE,new String[] {"Obtenir formes", MENU_FICHIER_QUITTER });
+		JMenu menu = ApplicationSupport.addMenu(this, MENU_FICHIER_TITRE,new String[] {MENU_FICHIER_OBTENIR_FORMES, MENU_FICHIER_QUITTER });
 
 		getFormsMenuItem = menu.getItem(0);
 		getFormsMenuItem.addActionListener(new DemarrerListener());
@@ -470,6 +470,7 @@ public class ApplicationSwing extends JFrame {
 	private static final String
 			MENU_FICHIER_TITRE                            = "app.frame.menus.file.title",
 			MENU_FICHIER_QUITTER                          = "app.frame.menus.file.exit",
+			MENU_FICHIER_OBTENIR_FORMES                   = "app.frame.menus.file.getForms",
 			MENU_DESSIN_TITRE                             = "app.frame.menus.draw.title",
 			MENU_DESSIN_DEMARRER                          = "app.frame.menus.draw.start",
 			MENU_DESSIN_ARRETER                           = "app.frame.menus.draw.stop",
