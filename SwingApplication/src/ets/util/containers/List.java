@@ -217,6 +217,9 @@ public class List<T> implements Iterable<T> {
 		public D data;
 	}
 	
+	/**
+	 * Itérateur permettant de parcourir la liste.
+	 */
 	private class ListIterator<E> implements Iterator<E> {
 		public ListIterator(Node<E> node) {
 			next = node;
