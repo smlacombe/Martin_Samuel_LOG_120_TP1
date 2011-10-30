@@ -130,22 +130,10 @@ public class ApplicationSwing extends JFrame {
 			
 			sortShapes();
 			
-			final int DISTANCE_BETWEEN_SHAPES = 5;
-			
-			int x = DISTANCE_BETWEEN_SHAPES;
-			int Y = DISTANCE_BETWEEN_SHAPES;
-			int maxHeight = 0;
-			
-			for (ets.log120.tp1.Shape s : list) {
-				if(x + s.getWidth() > CANEVAS_LARGEUR) {
-					x = DISTANCE_BETWEEN_SHAPES;
-					Y += maxHeight + DISTANCE_BETWEEN_SHAPES;
-					maxHeight = 0;
-				}
-				s.draw(g2d, x, Y);
-				x += s.getWidth() + DISTANCE_BETWEEN_SHAPES;
-				maxHeight = Math.max(maxHeight, s.getHeight());
-			}
+			if (sortByDefaultOrder.isSelected())
+				printNonSortedShapes(g2d);
+			else
+				printSortedShapes(g2d);
 						
 			g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
 			RenderingHints.VALUE_ANTIALIAS_ON);		
@@ -288,7 +276,8 @@ public class ApplicationSwing extends JFrame {
 		menu.add(sortByHeightDescending         = createRadioButtonMenuItem(group, MENU_VIEW_SORT_AS_HEIGHT_DESCENDING));
 		menu.add(sortByWidthAscending           = createRadioButtonMenuItem(group, MENU_VIEW_SORT_AS_WIDTH_ASCENDING));
 		menu.add(sortByWidthDescending          = createRadioButtonMenuItem(group, MENU_VIEW_SORT_AS_WIDTH_DESCENDING));
-		
+		menu.add(sortByDefaultOrder	            = createRadioButtonMenuItem(group, MENU_VIEW_SORT_AS_DEFAULT_ORDER));
+				
 		sortBySequenceNumberAscending.setSelected(true);
 		
 		menuBar.add(menu);
@@ -334,6 +323,31 @@ public class ApplicationSwing extends JFrame {
 		} else if (sortByWidthDescending.isSelected()) {
 			list.sort(new Not(new WidthAscending()));
 		}
+	}
+	
+	private void printSortedShapes(Graphics g2d) {
+		final int DISTANCE_BETWEEN_SHAPES = 5;
+		
+		int x = DISTANCE_BETWEEN_SHAPES;
+		int Y = DISTANCE_BETWEEN_SHAPES;
+		int maxHeight = 0;
+		
+		for (ets.log120.tp1.Shape s : list) {
+			if(x + s.getWidth() > CANEVAS_LARGEUR) {
+				x = DISTANCE_BETWEEN_SHAPES;
+				Y += maxHeight + DISTANCE_BETWEEN_SHAPES;
+				maxHeight = 0;
+			}
+			s.draw(g2d, x, Y);
+			x += s.getWidth() + DISTANCE_BETWEEN_SHAPES;
+			maxHeight = Math.max(maxHeight, s.getHeight());
+		}
+		
+	}
+	
+	private void printNonSortedShapes(Graphics g2d) {
+		for (ets.log120.tp1.Shape s : list)
+			s.draw(g2d);
 	}
 	
 	/** Créer le menu "Help". */
@@ -469,6 +483,7 @@ public class ApplicationSwing extends JFrame {
 			MENU_VIEW_SORT_AS_HEIGHT_DESCENDING           = "app.frame.menus.view.sortBy.heightDescending",
 			MENU_VIEW_SORT_AS_WIDTH_ASCENDING             = "app.frame.menus.view.sortBy.widthAscending",
 			MENU_VIEW_SORT_AS_WIDTH_DESCENDING            = "app.frame.menus.view.sortBy.widthDescending",
+			MENU_VIEW_SORT_AS_DEFAULT_ORDER               = "app.frame.menus.view.sortBy.defaultOrder",
 			MESSAGE_DIALOGUE_A_PROPOS                     = "app.frame.dialog.about";
 	private static final int NOMBRE_DE_FORMES = 10;
 	private static final long serialVersionUID = 1L;
@@ -490,4 +505,5 @@ public class ApplicationSwing extends JFrame {
 	private JRadioButtonMenuItem sortByHeightDescending;
 	private JRadioButtonMenuItem sortByWidthAscending;
 	private JRadioButtonMenuItem sortByWidthDescending;
+	private JRadioButtonMenuItem sortByDefaultOrder;
 }
