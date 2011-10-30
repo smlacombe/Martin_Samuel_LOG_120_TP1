@@ -325,6 +325,9 @@ public class ApplicationSwing extends JFrame {
 		}
 	}
 	
+	/**
+	 * Dessine à l'écran les formes en tenant compte du tri.
+	 */
 	private void printSortedShapes(Graphics g2d) {
 		final int DISTANCE_BETWEEN_SHAPES = 5;
 		
@@ -338,6 +341,7 @@ public class ApplicationSwing extends JFrame {
 				Y += maxHeight + DISTANCE_BETWEEN_SHAPES;
 				maxHeight = 0;
 			}
+			
 			s.draw(g2d, x, Y);
 			x += s.getWidth() + DISTANCE_BETWEEN_SHAPES;
 			maxHeight = Math.max(maxHeight, s.getHeight());
@@ -345,6 +349,9 @@ public class ApplicationSwing extends JFrame {
 		
 	}
 	
+	/**
+	 * Dessine à l'écran les formes selon leur ordre original.
+	 */
 	private void printNonSortedShapes(Graphics g2d) {
 		for (ets.log120.tp1.Shape s : list)
 			s.draw(g2d);
