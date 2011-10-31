@@ -1,10 +1,10 @@
-package ets.log120.tp1.functors;
+package ets.log120.tp2.functors;
 
-import ets.log120.tp1.Circle;
-import ets.log120.tp1.Oval;
-import ets.log120.tp1.Rectangle;
-import ets.log120.tp1.Shape;
-import ets.log120.tp1.Square;
+import ets.log120.tp2.Circle;
+import ets.log120.tp2.Oval;
+import ets.log120.tp2.Rectangle;
+import ets.log120.tp2.Shape;
+import ets.log120.tp2.Square;
 
 /**
  * Foncteur indiquant si le type de forme est supérieur à une autre forme

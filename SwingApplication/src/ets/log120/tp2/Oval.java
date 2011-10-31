@@ -1,4 +1,4 @@
-package ets.log120.tp1;
+package ets.log120.tp2;
 
 /**
  * Spécialisation d'une forme permettant d'afficher un oval.

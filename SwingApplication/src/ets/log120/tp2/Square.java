@@ -1,4 +1,4 @@
-package ets.log120.tp1;
+package ets.log120.tp2;
 
 /**
  * Spécialisation d'un rectangle permettant d'afficher un carré.

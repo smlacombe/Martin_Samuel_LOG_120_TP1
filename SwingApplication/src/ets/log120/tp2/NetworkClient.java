@@ -1,4 +1,4 @@
-package ets.log120.tp1;
+package ets.log120.tp2;
 
 import java.io.IOException;
 import java.net.UnknownHostException;

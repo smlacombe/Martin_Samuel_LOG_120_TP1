@@ -1,4 +1,4 @@
-package ets.log120.tp1;
+package ets.log120.tp2;
 
 /**
  * Classe métier fabriquant des utilisées par l'application. Cette classe utilise le patron de conception Factory.

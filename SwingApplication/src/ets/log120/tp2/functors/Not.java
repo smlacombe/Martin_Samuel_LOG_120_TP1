@@ -1,6 +1,6 @@
-package ets.log120.tp1.functors;
+package ets.log120.tp2.functors;
 
-import ets.log120.tp1.Shape;
+import ets.log120.tp2.Shape;
 
 /**
  * Foncteur inversant la valeur retournée par un autre foncteur.

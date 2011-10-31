@@ -1,4 +1,4 @@
-package ets.log120.tp1;
+package ets.log120.tp2;
 
 /**
  * Spécialisation d'un oval permettant d'afficher un cercle.

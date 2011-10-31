@@ -1,6 +1,6 @@
-package ets.log120.tp1.functors;
+package ets.log120.tp2.functors;
 
-import ets.log120.tp1.Shape;
+import ets.log120.tp2.Shape;
 
 /**
  * Foncteur indiquant si une forme a une largeur inférieur à une seconde forme.

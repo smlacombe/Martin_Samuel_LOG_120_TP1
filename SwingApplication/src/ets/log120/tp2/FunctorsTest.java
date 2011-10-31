@@ -1,17 +1,17 @@
-package ets.log120.tp1;
+package ets.log120.tp2;
 
 import static org.junit.Assert.*;
 
 import org.junit.Before;
 import org.junit.Test;
 
-import ets.log120.tp1.functors.AreaAscending;
-import ets.log120.tp1.functors.HeightAscending;
-import ets.log120.tp1.functors.MaxDistanceBetweenPointsAscending;
-import ets.log120.tp1.functors.Not;
-import ets.log120.tp1.functors.SequenceNumberAscending;
-import ets.log120.tp1.functors.ShapeTypeAscending;
-import ets.log120.tp1.functors.WidthAscending;
+import ets.log120.tp2.functors.AreaAscending;
+import ets.log120.tp2.functors.HeightAscending;
+import ets.log120.tp2.functors.MaxDistanceBetweenPointsAscending;
+import ets.log120.tp2.functors.Not;
+import ets.log120.tp2.functors.SequenceNumberAscending;
+import ets.log120.tp2.functors.ShapeTypeAscending;
+import ets.log120.tp2.functors.WidthAscending;
 
 public class FunctorsTest {
 

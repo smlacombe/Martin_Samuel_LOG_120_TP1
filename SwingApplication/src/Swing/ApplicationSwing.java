@@ -40,9 +40,9 @@ import javax.swing.KeyStroke;
 
 import ets.util.containers.*;
 import ets.log120.*;
-import ets.log120.tp1.Shape;
-import ets.log120.tp1.ShapeFactory;
-import ets.log120.tp1.functors.*;
+import ets.log120.tp2.Shape;
+import ets.log120.tp2.ShapeFactory;
+import ets.log120.tp2.functors.*;
 /**
  * <code>ApplicationSwing</code> est un exemple d'une
  * application en Java qui fournit une interface Swing, avec un simple
@@ -127,7 +127,6 @@ public class ApplicationSwing extends JFrame {
 
 		public void paintComponent(Graphics g) {
 			super.paintComponent(g);
-							
 			Graphics2D g2d = (Graphics2D) g;
 			
 			sortShapes();
@@ -189,7 +188,7 @@ public class ApplicationSwing extends JFrame {
 			assert serverAddress != null;
 			assert serverPort != 0;
 			
-			connection = new ets.log120.tp1.NetworkClient(serverAddress, serverPort);
+			connection = new ets.log120.tp2.NetworkClient(serverAddress, serverPort);
 			connectedToServer = true;
 			rafraichirMenus();
 			
@@ -334,7 +333,7 @@ public class ApplicationSwing extends JFrame {
 		int Y = DISTANCE_BETWEEN_SHAPES;
 		int maxHeight = 0;
 		
-		for (ets.log120.tp1.Shape s : list) {
+		for (ets.log120.tp2.Shape s : list) {
 			if(x + s.getWidth() > CANEVAS_LARGEUR) {
 				x = DISTANCE_BETWEEN_SHAPES;
 				Y += maxHeight + DISTANCE_BETWEEN_SHAPES;
@@ -351,7 +350,7 @@ public class ApplicationSwing extends JFrame {
 	 * Dessine à l'écran les formes selon leur ordre original.
 	 */
 	private void printNonSortedShapes(Graphics g2d) {
-		for (ets.log120.tp1.Shape s : list)
+		for (ets.log120.tp2.Shape s : list)
 			s.draw(g2d);
 	}
 	
@@ -478,10 +477,10 @@ public class ApplicationSwing extends JFrame {
 			MESSAGE_DIALOGUE_A_PROPOS         = "app.frame.dialog.about";
 	private static final int NOMBRE_DE_FORMES = 10;
 	private static final long serialVersionUID = 1L;
-	private List<ets.log120.tp1.Shape> list = new List<ets.log120.tp1.Shape>();
+	private ets.util.containers.List<ets.log120.tp2.Shape> list = new ets.util.containers.List<ets.log120.tp2.Shape>();
 	private String serverAddress;
 	private int serverPort;
-	private ets.log120.tp1.NetworkClient connection;
+	private ets.log120.tp2.NetworkClient connection;
 	private boolean workerActif, connectedToServer;
 	private JMenuItem getFormsMenuItem, serverAddressMenuItem;
 	private JRadioButtonMenuItem sortBySequenceNumber;
