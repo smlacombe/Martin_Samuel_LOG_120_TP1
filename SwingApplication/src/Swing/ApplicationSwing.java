@@ -27,6 +27,7 @@ import java.io.IOException;
 import java.net.UnknownHostException;
 
 import javax.swing.ButtonGroup;
+import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
@@ -39,6 +40,7 @@ import javax.swing.KeyStroke;
 
 import ets.util.containers.*;
 import ets.log120.*;
+import ets.log120.tp1.Shape;
 import ets.log120.tp1.ShapeFactory;
 import ets.log120.tp1.functors.*;
 /**
@@ -264,21 +266,23 @@ public class ApplicationSwing extends JFrame {
 		JMenu menu = new JMenu(ApplicationSupport.getResource(MENU_VIEW_TITLE));
 		ButtonGroup group = new ButtonGroup();
 		
-		menu.add(sortBySequenceNumberAscending  = createRadioButtonMenuItem(group, MENU_VIEW_SORT_AS_SEQUENCE_NUMBER_ASCENDING));
-		menu.add(sortBySequenceNumberDescending = createRadioButtonMenuItem(group, MENU_VIEW_SORT_AS_SEQUENCE_NUMBER_DESCENDING));
-		menu.add(sortByAreaAscending            = createRadioButtonMenuItem(group, MENU_VIEW_SORT_AS_AREA_ASCENDING));
-		menu.add(sortByAreaDescending           = createRadioButtonMenuItem(group, MENU_VIEW_SORT_AS_AREA_DESCENDING));
-		menu.add(sortByShapeTypeAscending       = createRadioButtonMenuItem(group, MENU_VIEW_SORT_AS_SHAPE_TYPE_ASCENDING));
-		menu.add(sortByShapeTypeDescending      = createRadioButtonMenuItem(group, MENU_VIEW_SORT_AS_SHAPE_TYPE_DESCENDING));
-		menu.add(sortByDistanceAscending        = createRadioButtonMenuItem(group, MENU_VIEW_SORT_AS_DISTANCE_ASCENDING));
-		menu.add(sortByDistanceDescending       = createRadioButtonMenuItem(group, MENU_VIEW_SORT_AS_DISTANCE_DESCENDING));
-		menu.add(sortByHeightAscending          = createRadioButtonMenuItem(group, MENU_VIEW_SORT_AS_HEIGHT_ASCENDING));
-		menu.add(sortByHeightDescending         = createRadioButtonMenuItem(group, MENU_VIEW_SORT_AS_HEIGHT_DESCENDING));
-		menu.add(sortByWidthAscending           = createRadioButtonMenuItem(group, MENU_VIEW_SORT_AS_WIDTH_ASCENDING));
-		menu.add(sortByWidthDescending          = createRadioButtonMenuItem(group, MENU_VIEW_SORT_AS_WIDTH_DESCENDING));
-		menu.add(sortByDefaultOrder	            = createRadioButtonMenuItem(group, MENU_VIEW_SORT_AS_DEFAULT_ORDER));
-				
-		sortBySequenceNumberAscending.setSelected(true);
+		menu.add(sortByDefaultOrder	  = createRadioButtonMenuItem(group, MENU_VIEW_SORT_AS_DEFAULT_ORDER));
+		menu.add(sortBySequenceNumber = createRadioButtonMenuItem(group, MENU_VIEW_SORT_AS_SEQUENCE_NUMBER));
+		menu.add(sortByArea           = createRadioButtonMenuItem(group, MENU_VIEW_SORT_AS_AREA));
+		menu.add(sortByShapeType      = createRadioButtonMenuItem(group, MENU_VIEW_SORT_AS_SHAPE_TYPE));
+		menu.add(sortByDistance       = createRadioButtonMenuItem(group, MENU_VIEW_SORT_AS_DISTANCE));
+		menu.add(sortByHeight         = createRadioButtonMenuItem(group, MENU_VIEW_SORT_AS_HEIGHT));
+		menu.add(sortByWidth          = createRadioButtonMenuItem(group, MENU_VIEW_SORT_AS_WIDTH));
+		menu.addSeparator();
+		menu.add(invertOrder = new JCheckBoxMenuItem(ApplicationSupport.getResource(MENU_VIEW_SORT_AS_INVERT_ORDER)));
+		
+		invertOrder.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				repaint();
+			}
+		});
+		sortByDefaultOrder.setSelected(true);
 		
 		menuBar.add(menu);
 		return menu;
@@ -298,39 +302,34 @@ public class ApplicationSwing extends JFrame {
 	}
 	
 	private void sortShapes() {
-		if (sortBySequenceNumberAscending.isSelected()) {
-			list.sort(new SequenceNumberAscending());
-		} else if (sortBySequenceNumberDescending.isSelected()) {
-			list.sort(new Not(new SequenceNumberAscending()));
-		} else if (sortByAreaAscending.isSelected()) {
-			list.sort(new AreaAscending());
-		} else if (sortByAreaDescending.isSelected()) {
-			list.sort(new Not(new AreaAscending()));
-		} else if (sortByShapeTypeAscending.isSelected()) {
-			list.sort(new ShapeTypeAscending());
-		} else if (sortByShapeTypeDescending.isSelected()) {
-			list.sort(new Not(new ShapeTypeAscending()));
-		} else if (sortByDistanceAscending.isSelected()) {
-			list.sort(new MaxDistanceBetweenPointsAscending());
-		} else if (sortByDistanceDescending.isSelected()) {
-			list.sort(new Not(new MaxDistanceBetweenPointsAscending()));
-		} else if (sortByHeightAscending.isSelected()) {
-			list.sort(new HeightAscending());
-		} else if (sortByHeightDescending.isSelected()) {
-			list.sort(new Not(new HeightAscending()));
-		} else if (sortByWidthAscending.isSelected()) {
-			list.sort(new WidthAscending());
-		} else if (sortByWidthDescending.isSelected()) {
-			list.sort(new Not(new WidthAscending()));
+		java.util.Comparator<Shape> comp = null;
+		
+		if (sortBySequenceNumber.isSelected()) {
+			comp = new SequenceNumberAscending();
+		} else if (sortByArea.isSelected()) {
+			comp = new AreaAscending();
+		} else if (sortByShapeType.isSelected()) {
+			comp = new ShapeTypeAscending();
+		} else if (sortByDistance.isSelected()) {
+			comp = new MaxDistanceBetweenPointsAscending();
+		} else if (sortByHeight.isSelected()) {
+			comp = new HeightAscending();
+		} else if (sortByWidth.isSelected()) {
+			comp = new WidthAscending();
+		}
+		
+		if (comp != null) {
+			if (invertOrder.isSelected())
+				comp = new Not(comp);
+			
+			list.sort(comp);
 		}
 	}
 	
 	/**
 	 * Dessine à l'écran les formes en tenant compte du tri.
 	 */
-	private void printSortedShapes(Graphics g2d) {
-		final int DISTANCE_BETWEEN_SHAPES = 5;
-		
+	private void printSortedShapes(Graphics g2d) {		
 		int x = DISTANCE_BETWEEN_SHAPES;
 		int Y = DISTANCE_BETWEEN_SHAPES;
 		int maxHeight = 0;
@@ -346,7 +345,6 @@ public class ApplicationSwing extends JFrame {
 			x += s.getWidth() + DISTANCE_BETWEEN_SHAPES;
 			maxHeight = Math.max(maxHeight, s.getHeight());
 		}
-		
 	}
 	
 	/**
@@ -366,8 +364,8 @@ public class ApplicationSwing extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				JOptionPane.showMessageDialog(null, ApplicationSupport.getResource(MESSAGE_DIALOGUE_A_PROPOS),
-					ApplicationSupport.getResource(MENU_AIDE_PROPOS), JOptionPane.INFORMATION_MESSAGE);
-		}
+				ApplicationSupport.getResource(MENU_AIDE_PROPOS), JOptionPane.INFORMATION_MESSAGE);
+			}
 		});
 
 		return menu;
@@ -377,7 +375,6 @@ public class ApplicationSwing extends JFrame {
 	 * Désactive l'affichage des formes si nécessaire et déconnecte le client.
 	 */
 	private void disconnectClient() {
-		//La précondition est que le client doit être connecté au serveur.
 		assert connectedToServer;
 		
 		if (workerActif) {
@@ -453,46 +450,32 @@ public class ApplicationSwing extends JFrame {
 	// Attribut(s)
 	// ////////////////////////////////////////////////
 	
+	private static final int DISTANCE_BETWEEN_SHAPES = 5;
 	private static final int CANEVAS_HAUTEUR = 500;
 	private static final int CANEVAS_LARGEUR = 500;
-	private static final int DELAI_ENTRE_FORMES_MSEC = 1000;
 	private static final int DELAI_QUITTER_MSEC = 200;
-	private static final int FORME_MAX_HAUTEUR = 200;
-	private static final int FORME_MAX_LARGEUR = 200;
 	private static final int MARGE_H = 50;
 	private static final int MARGE_V = 60;
-	private static final int MENU_DESSIN_ARRETER_TOUCHE_MASK = ActionEvent.CTRL_MASK;
-	private static final char MENU_DESSIN_ARRETER_TOUCHE_RACC = KeyEvent.VK_A;
-	private static final int MENU_DESSIN_DEMARRER_TOUCHE_MASK = ActionEvent.CTRL_MASK;
-	private static final char MENU_DESSIN_DEMARRER_TOUCHE_RACC = KeyEvent.VK_D;
 	private static final int MENU_FICHIER_QUITTER_TOUCHE_MASK = ActionEvent.CTRL_MASK;
 	private static final char MENU_FICHIER_QUITTER_TOUCHE_RACC = KeyEvent.VK_Q;
 	private static final String
-			MENU_FICHIER_TITRE                            = "app.frame.menus.file.title",
-			MENU_FICHIER_QUITTER                          = "app.frame.menus.file.exit",
-			MENU_FICHIER_OBTENIR_FORMES                   = "app.frame.menus.file.getForms",
-			MENU_DESSIN_TITRE                             = "app.frame.menus.draw.title",
-			MENU_DESSIN_DEMARRER                          = "app.frame.menus.draw.start",
-			MENU_DESSIN_ARRETER                           = "app.frame.menus.draw.stop",
-			MENU_AIDE_TITRE                               = "app.frame.menus.help.title",
-			MENU_AIDE_PROPOS                              = "app.frame.menus.help.about",
-			MENU_NETWORK_TITLE                            = "app.frame.menus.network.title",
-			MENU_NETWORK_SERVER_ADDRESS                   = "app.frame.menus.network.serverAddress",
-			MENU_VIEW_TITLE                               = "app.frame.menus.view.title",
-			MENU_VIEW_SORT_AS_SEQUENCE_NUMBER_ASCENDING   = "app.frame.menus.view.sortBy.sequenceNumberAscending",
-			MENU_VIEW_SORT_AS_SEQUENCE_NUMBER_DESCENDING  = "app.frame.menus.view.sortBy.sequenceNumberDescending",
-			MENU_VIEW_SORT_AS_AREA_ASCENDING              = "app.frame.menus.view.sortBy.areaAscending",
-			MENU_VIEW_SORT_AS_AREA_DESCENDING             = "app.frame.menus.view.sortBy.areaDescending",
-			MENU_VIEW_SORT_AS_SHAPE_TYPE_ASCENDING        = "app.frame.menus.view.sortBy.shapeTypeAscending",
-			MENU_VIEW_SORT_AS_SHAPE_TYPE_DESCENDING       = "app.frame.menus.view.sortBy.shapeTypeDescending",
-			MENU_VIEW_SORT_AS_DISTANCE_ASCENDING          = "app.frame.menus.view.sortBy.distanceAscending",
-			MENU_VIEW_SORT_AS_DISTANCE_DESCENDING         = "app.frame.menus.view.sortBy.distanceDescending",
-			MENU_VIEW_SORT_AS_HEIGHT_ASCENDING            = "app.frame.menus.view.sortBy.heightAscending",
-			MENU_VIEW_SORT_AS_HEIGHT_DESCENDING           = "app.frame.menus.view.sortBy.heightDescending",
-			MENU_VIEW_SORT_AS_WIDTH_ASCENDING             = "app.frame.menus.view.sortBy.widthAscending",
-			MENU_VIEW_SORT_AS_WIDTH_DESCENDING            = "app.frame.menus.view.sortBy.widthDescending",
-			MENU_VIEW_SORT_AS_DEFAULT_ORDER               = "app.frame.menus.view.sortBy.defaultOrder",
-			MESSAGE_DIALOGUE_A_PROPOS                     = "app.frame.dialog.about";
+			MENU_FICHIER_TITRE                = "app.frame.menus.file.title",
+			MENU_FICHIER_QUITTER              = "app.frame.menus.file.exit",
+			MENU_FICHIER_OBTENIR_FORMES       = "app.frame.menus.file.getForms",
+			MENU_AIDE_TITRE                   = "app.frame.menus.help.title",
+			MENU_AIDE_PROPOS                  = "app.frame.menus.help.about",
+			MENU_NETWORK_TITLE                = "app.frame.menus.network.title",
+			MENU_NETWORK_SERVER_ADDRESS       = "app.frame.menus.network.serverAddress",
+			MENU_VIEW_TITLE                   = "app.frame.menus.view.title",
+			MENU_VIEW_SORT_AS_SEQUENCE_NUMBER = "app.frame.menus.view.sortBy.sequenceNumber",
+			MENU_VIEW_SORT_AS_AREA            = "app.frame.menus.view.sortBy.area",
+			MENU_VIEW_SORT_AS_SHAPE_TYPE      = "app.frame.menus.view.sortBy.shapeType",
+			MENU_VIEW_SORT_AS_DISTANCE        = "app.frame.menus.view.sortBy.distance",
+			MENU_VIEW_SORT_AS_HEIGHT          = "app.frame.menus.view.sortBy.height",
+			MENU_VIEW_SORT_AS_WIDTH           = "app.frame.menus.view.sortBy.width",
+			MENU_VIEW_SORT_AS_DEFAULT_ORDER   = "app.frame.menus.view.sortBy.defaultOrder",
+			MENU_VIEW_SORT_AS_INVERT_ORDER    = "app.frame.menus.view.sortBy.invertOrder",
+			MESSAGE_DIALOGUE_A_PROPOS         = "app.frame.dialog.about";
 	private static final int NOMBRE_DE_FORMES = 10;
 	private static final long serialVersionUID = 1L;
 	private List<ets.log120.tp1.Shape> list = new List<ets.log120.tp1.Shape>();
@@ -501,17 +484,12 @@ public class ApplicationSwing extends JFrame {
 	private ets.log120.tp1.NetworkClient connection;
 	private boolean workerActif, connectedToServer;
 	private JMenuItem getFormsMenuItem, serverAddressMenuItem;
-	private JRadioButtonMenuItem sortBySequenceNumberAscending;
-	private JRadioButtonMenuItem sortBySequenceNumberDescending;
-	private JRadioButtonMenuItem sortByAreaAscending;
-	private JRadioButtonMenuItem sortByAreaDescending;
-	private JRadioButtonMenuItem sortByShapeTypeAscending;
-	private JRadioButtonMenuItem sortByShapeTypeDescending;
-	private JRadioButtonMenuItem sortByDistanceAscending;
-	private JRadioButtonMenuItem sortByDistanceDescending;
-	private JRadioButtonMenuItem sortByHeightAscending;
-	private JRadioButtonMenuItem sortByHeightDescending;
-	private JRadioButtonMenuItem sortByWidthAscending;
-	private JRadioButtonMenuItem sortByWidthDescending;
+	private JRadioButtonMenuItem sortBySequenceNumber;
+	private JRadioButtonMenuItem sortByArea;
+	private JRadioButtonMenuItem sortByShapeType;
+	private JRadioButtonMenuItem sortByDistance;
+	private JRadioButtonMenuItem sortByHeight;
+	private JRadioButtonMenuItem sortByWidth;
 	private JRadioButtonMenuItem sortByDefaultOrder;
+	private JCheckBoxMenuItem invertOrder;
 }
